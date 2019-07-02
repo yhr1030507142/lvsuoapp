@@ -1,0 +1,135 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	 {
+	    "path" : "pages/login/login",
+	    "style" : {}
+	},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "案件"
+			}
+		}
+	    ,{
+            "path" : "pages/kehu/kehu",
+			   "style": {
+				   "navigationBarTitleText": "客户",
+				   "enablePullDownRefresh": true
+            }
+        
+        }
+        ,{
+            "path" : "pages/gongzuotai/gongzuotai",
+            "style": {
+            	"navigationBarTitleText": "工作台"
+            }
+        }
+        ,{
+            "path" : "pages/wode/wode",
+            "style": {
+            	"navigationBarTitleText": "我的"
+            }
+        }
+        ,{
+            "path" : "pages/caseAdd/caseAdd",
+           "style": {
+           	"navigationBarTitleText": "新增案件"
+           }
+        }
+        ,{
+            "path" : "pages/caseUpdate/caseUpdate",
+            "style" : {
+					"navigationBarTitleText": "案件修改"
+			}
+        }
+        ,{
+            "path" : "pages/caseEdit/caseEdit",
+            "style" : {
+					"navigationBarTitleText": "案件详情"
+			}
+        }
+        ,{
+            "path" : "pages/liyijiansuo/liyijiansuo",
+            "style" : {
+				"navigationBarTitleText": "利益检索"
+			}
+        }
+        ,{
+            "path" : "pages/jiansuojieguo/jiansuojieguo",
+            "style" : {
+				"navigationBarTitleText": "检索结果"
+			}
+        }
+        ,{
+            "path" : "pages/wendang/wendang",
+            "style" : {
+				"navigationBarTitleText": "文档"
+			}
+        }
+       
+        ,{
+            "path" : "pages/loginUser/loginUser",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/contract/contract",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/tongji/tongji",
+            "style" : {
+				"navigationBarTitleText": "数据统计"
+				// "app-plus":{
+				// 		"titleNView":false
+				// 			}
+			}
+        }
+        ,{
+            "path" : "pages/undateMyInfo/undateMyInfo",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/contractAdd/contractAdd",
+            "style" : {}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar" : {
+        "color" : "#cdcdcd",
+        "selectedColor" : "#7E2C2E",
+        "borderStyle" : "black",
+        "backgroundColor" : "#ffffff",
+        "list" : [
+            {
+                "pagePath" : "pages/index/index",
+                "iconPath" : "static/img/anjian.png",
+                "selectedIconPath" :"static/img/anjian1.png",
+                "text" : "案件"
+            },
+            {
+                 "pagePath" : "pages/kehu/kehu",
+              "iconPath" : "static/img/kehu.png",
+              "selectedIconPath" :"static/img/kehu1.png",
+              "text" : "客户"
+            },
+            {
+                  "pagePath" : "pages/gongzuotai/gongzuotai",
+               "iconPath" : "static/img/gongzuotai.png",
+               "selectedIconPath" :"static/img/gongzuotai1.png",
+               "text" : "工作台"
+            },
+            {
+                  "pagePath" : "pages/wode/wode",
+               "iconPath" : "static/img/wode.png",
+               "selectedIconPath" :"static/img/wode1.png",
+               "text" : "我的"
+            }
+        ]
+    }
+
+}

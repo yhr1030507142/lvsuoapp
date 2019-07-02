@@ -1,0 +1,1 @@
+<view class="content"><view class="box"><view class="ul _ul"><view data-event-opts="{{[['tap',[['goLiyi']]]]}}" class="li _li" bindtap="__e">利益检索</view><view data-event-opts="{{[['tap',[['goTongji']]]]}}" class="li _li" bindtap="__e">统计</view><view data-event-opts="{{[['tap',[['tuichu']]]]}}" class="li _li" bindtap="__e">退出</view></view></view></view>
