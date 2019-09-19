@@ -2,74 +2,115 @@
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 	 {
 	    "path" : "pages/login/login",
-	    "style" : {}
+	    "style" : {
+			"navigationBarTitleText": "律所",
+			"app-plus":{
+					"titleNView":false
+					}
+		}
 	},
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "案件"
+				"navigationBarTitleText": "案件",
+				"enablePullDownRefresh": true,//就是这个
+				"app-plus":{
+				"titleNView":false
+				}
 			}
 		}
 	    ,{
             "path" : "pages/kehu/kehu",
 			   "style": {
 				   "navigationBarTitleText": "客户",
-				   "enablePullDownRefresh": true
+				   "enablePullDownRefresh": true,
+				   "app-plus":{
+				   		"titleNView":false
+				   			}
             }
         
         }
         ,{
             "path" : "pages/gongzuotai/gongzuotai",
             "style": {
-            	"navigationBarTitleText": "工作台"
+            	"navigationBarTitleText": "工作台",
+				"app-plus":{
+						"titleNView":false
+							}
             }
         }
         ,{
             "path" : "pages/wode/wode",
             "style": {
-            	"navigationBarTitleText": "我的"
+            	"navigationBarTitleText": "我的",
+				"app-plus":{
+					"titleNView":false
+					}
             }
         }
         ,{
             "path" : "pages/caseAdd/caseAdd",
            "style": {
            	"navigationBarTitleText": "新增案件"
+			// "app-plus":{
+			// 		"titleNView":false
+			// 			}
            }
         }
         ,{
             "path" : "pages/caseUpdate/caseUpdate",
             "style" : {
 					"navigationBarTitleText": "案件修改"
+					// "app-plus":{
+					// 		"titleNView":false
+					// 			}
 			}
         }
         ,{
             "path" : "pages/caseEdit/caseEdit",
             "style" : {
 					"navigationBarTitleText": "案件详情"
+					// "app-plus":{
+					// 		"titleNView":false
+					// 			}
 			}
         }
         ,{
             "path" : "pages/liyijiansuo/liyijiansuo",
             "style" : {
 				"navigationBarTitleText": "利益检索"
+				// "app-plus":{
+				// 		"titleNView":false
+				// 			}
 			}
         }
         ,{
             "path" : "pages/jiansuojieguo/jiansuojieguo",
             "style" : {
 				"navigationBarTitleText": "检索结果"
+				// "app-plus":{
+				// 		"titleNView":false
+				// 			}
 			}
         }
         ,{
             "path" : "pages/wendang/wendang",
             "style" : {
-				"navigationBarTitleText": "文档"
+				"navigationBarTitleText": "文档",
+				"app-plus":{
+						"titleNView":false
+							}
 			}
         }
        
         ,{
             "path" : "pages/loginUser/loginUser",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "账号登录"
+				// "app-plus":{
+				// 		"titleNView":false
+				// 			}
+			}
         }
         ,{
             "path" : "pages/contract/contract",
@@ -86,11 +127,40 @@
         }
         ,{
             "path" : "pages/undateMyInfo/undateMyInfo",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "我的编辑"
+			}
         }
         ,{
             "path" : "pages/contractAdd/contractAdd",
+            "style" : {
+				"navigationBarTitleText": "合同末班",
+				"app-plus":{
+						"titleNView":false
+							}
+			}
+        }
+        ,{
+            "path" : "pages/luyin/luyin",
+            "style" : {
+				"navigationBarTitleText": "录音空间",
+				"app-plus":{
+						"titleNView":false
+							}
+			}
+        }
+        ,{
+            "path" : "pages/weixin/weixin",
             "style" : {}
+        }
+        ,{
+            "path" : "pages/kehuDetails/kehuDetails",
+            "style" : {
+				"app-plus": {
+				"titleNView": false ,//禁用原生导航栏
+				"bounce":"none"
+				}
+			} 
         }
     ],
 	"globalStyle": {

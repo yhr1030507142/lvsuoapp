@@ -1,10 +1,6 @@
 <template>
 	<view class="add">
-		
-
 	<view class="content">
-      
-
 	 <view class="content_middle flex col m-100">
 			<view class="content_middle_view">
 				<view class="content_middle_view_child flex col">
@@ -14,7 +10,7 @@
 						</view>
 						<view class="content_middle_view_child_bottom flex row">
 							
-						<select class="select" @change="changeCustomer()" v-model="customValue">
+						<select class="select" @change="changeCustomer(customValue)" v-model="customValue">
 							<option value="" disabled selected hidden>请选择客户类型</option>
 							<option :value="v.value" v-for="(v,i) in customTypeArr" :key="i">{{v.label}}</option>
 						</select>
@@ -154,9 +150,11 @@
 									</view>
 									
 									
-									<view class="content_middle_view_child_bottom_info flex col">
+									<view class="content_middle_view_child_bottom_info flex col" >
+									<quill-editor class="editor" v-model="Service_Content" ref="myQuillEditor" :options="editorOption" style="width:90%;margin: 0 auto; height: 200upx;border:1upx solid #999">
+									</quill-editor>
 											<!-- <rich-text :nodes="Service_Content" class="textarea"></rich-text> -->
-											<textarea value="" placeholder="" v-model="Service_Content" class="textarea"/>
+											<!-- <textarea value="" placeholder="" v-model="" class="textarea"/> -->
 									</view>	
 										
 							</view>
@@ -173,31 +171,28 @@
 							
 							<view class="content_middle_view_child_bottom_info flex col">
 									<view class="lawyer flex row">
-										<select name="" id="" class="select_lawyer" v-model="inputArr[0].Id">
+										<select name="" id="" class="select_lawyer" v-model="inputArr[0].Lawyer_Id">
 											<option :value="v.Id" v-for="(v,i) in  LawyerNameArr" :key="i">{{v.Staff_Name}}</option>
 										</select>
-										
-										<select name="" id="" class="select_lawyer"  style="margin-left:20upx" v-model="inputArr[0].laywerJob">
+										<select name="" id="" class="select_lawyer"  style="margin-left:20upx" v-model="inputArr[0].Case_Rule_Id">
 											<option :value="v.Id" v-for="(v,i) in  layerSelectArr" :key="i">{{v.Value}}</option>
-										</select>
-										 
+										</select> 
 									</view>
 									
-									<view class="lawyer flex row" v-for="(v,i) in userInfo" :key="i">
-										<select name="" id="" class="select_lawyer" v-model="inputArr[i+1].Id">
+									<view class="lawyer flex row"  v-for="(v,i) in userInfo" :key="i">
+										
+										<select name="" id="" class="select_lawyer" v-model="inputArr[i+1].Lawyer_Id">
 											<option :value="v.Id" v-for="(v,i) in  LawyerNameArr" :key="i">{{v.Staff_Name}}</option>
 										</select>
-										
-										<select name="" id="" class="select_lawyer"  style="margin-left:20upx" v-model="inputArr[i+1].laywerJob">
+										<select name="" id="" class="select_lawyer"  style="margin-left:20upx" v-model="inputArr[i+1].Case_Rule_Id">
 											<option :value="v.Id" v-for="(v,i) in  layerSelectArr" :key="i">{{v.Value}}</option>
 										</select>
 										<view class="jian img" @tap="deleteLine(i,userInfo,inputArr)">
 											<image src="../../static/img/jian.png" mode="" class="img_100"></image>
 										</view>
 									</view>
-									
 							</view>	 	 
-					</view>
+					</view> 
 				</view>
 				
 				<!--  -->
@@ -262,11 +257,11 @@
 							
 							<view class="content_middle_view_child_bottom_info flex col">
 									<view class="risk flex row">
-										<input type="text" v-model="riskArr[0].riskCondition">
+										<input type="text" v-model="riskArr[0].Risk_Achievement">
 									</view>
 									
 									<view class="risk flex row" v-for="(v,i) in riskAcount" :key="i">
-										<input type="text" v-model="riskArr[i+1].riskCondition">
+										<input type="text" v-model="riskArr[i+1].Risk_Achievement">
 										<view class="jian img" @tap="deleteLine(i,riskAcount,riskArr)">
 											<image src="../../static/img/jian.png" mode="" class="img_100"></image>
 										</view>
@@ -297,20 +292,20 @@
 										</view>
 									</view>
 									<view class="pay flex row">
-										 <picker mode="date" :value="timeArr[0].dateName" :start="startDate" :end="endDate" @change="bindDateChange" class="pay_date" v-model="timeArr[0].dateName">
-											<view class="uni-input">{{timeArr[0].dateName}}</view>
+										 <picker mode="date" :value="timeArr[0].Payment_Time" :start="startDate" :end="endDate" @change="bindDateChange" class="pay_date" v-model="timeArr[0].dateName">
+											<view class="uni-input">{{timeArr[0].Payment_Time}}</view>
 										</picker>
-										<input type="text" v-model="timeArr[0].payCount">
-										<input type="text" v-model="timeArr[0].describe">
+										<input type="text" v-model="timeArr[0].Charge_Amount">
+										<input type="text" v-model="timeArr[0].Describe">
 									</view>
 									
 									
 									<view class="pay flex row" v-for="(v,i) in payDate" :key="i" >
-										<picker mode="date" :value="timeArr[i+1].dateName" :start="startDate" :end="endDate" @change="bindDateChange1" :data-index="i" class="pay_date">
-											<view class="uni-input">{{timeArr[i+1].dateName}}</view>
+										<picker mode="date" :value="timeArr[i+1].Payment_Time" :start="startDate" :end="endDate" @change="bindDateChange1" :data-index="i" class="pay_date">
+											<view class="uni-input">{{timeArr[i+1].Payment_Time}}</view>
 										</picker>
-										<input type="text" v-model="timeArr[i+1].payCount">
-										<input type="text" v-model="timeArr[i+1].describe">
+										<input type="text" v-model="timeArr[i+1].Charge_Amount">
+										<input type="text" v-model="timeArr[i+1].Describe">
 										<view class="jian img" @tap="deleteLine(i,payDate,timeArr)">
 											<image src="../../static/img/jian.png" mode="" class="img_100"></image>
 										</view>
@@ -341,24 +336,24 @@
 									</view>
 								</view>
 								<view class="pay flex row">
-									<select name="" id="" class=""  v-model="nameJobArr[0].Id">
+									<select name="" id="" class=""  v-model="nameJobArr[0].Lawyer_Id">
 										<option :value="v.Id" v-for="(v,i) in  LawyerNameArr" :key="i">{{v.Staff_Name}}</option>
 									</select>
-									<select name="" id="" class="" v-model="nameJobArr[0].nameJobJob">
+									<select name="" id="" class="" v-model="nameJobArr[0].Rule_Id">
 										<option :value="v.Id" v-for="(v,i) in  layerSelectArr" :key="i">{{v.Value}}</option>
 									</select>
-									<input type="text" v-model="nameJobArr[0].nameJobRate">
+									<input type="text" v-model="nameJobArr[0].Rate">
 									<text>RMB/小时</text>
 								</view>
 								
 								<view class="pay flex row" v-for="(v,i) in nameJob" :key="i">
-									<select name="" id="" class=""  v-model="nameJobArr[i+1].Id">
+									<select name="" id="" class=""  v-model="nameJobArr[i+1].Lawyer_Id">
 											<option :value="v.Id" v-for="(v,i) in  LawyerNameArr" :key="i">{{v.Staff_Name}}</option>
 									</select>
-									<select name="" id="" class="" v-model="nameJobArr[i+1].nameJobJob">
+									<select name="" id="" class="" v-model="nameJobArr[i+1].Rule_Id">
 										<option :value="v.Id" v-for="(v,i) in  layerSelectArr" :key="i">{{v.Value}}</option>
 									</select>
-									<input type="text" v-model="nameJobArr[i+1].nameJobRate">
+									<input type="text" v-model="nameJobArr[i+1].Rate">
 									<text>RMB/小时</text>
 									<view class="jian img" @tap="deleteLine(i,nameJob,nameJobArr)">
 										<image src="../../static/img/jian.png" mode="" class="img_100"></image>
@@ -401,8 +396,7 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 // import { DatetimePicker } from 'mint-ui';
 	export default { 
 		data() {
-			  const currentDate = this.getDate({
-				format: true
+			  const currentDate = this.getDate({ 
 			})
 			return { 
 				value:'',
@@ -462,13 +456,27 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 					 fileName1:"",
 					 size:"",
 					 custom_Id:"",
-					 layWerInfoArr:[],					 
+					 layWerInfoArr:[],		
+					Case_Id:"",
+					Id:"",
+					Charging_Method:"",
+					editorOption: {
+						modules: {
+					
+						},
+						placeholder: '',
+						theme: ''
+					},
 					 
 				
 			}
 		}, 
-		mounted() {
-			var _self =this
+		onLoad(option) {
+			 console.log(option)
+	  var _self =this
+			_self.userInfo = []
+			_self.Id = option.Id
+			_self.Charging_Method = option.Charging_Method
 			    _self.getUpdateInfo()
 				_self.getSuoshuhangye()
 				_self.getOneMenu()
@@ -476,21 +484,22 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 			 
 		},
 		onShow(){
-	
+			var _self  =this
 		},
 		methods: {
+			
 			 getUpdateInfo(){
 				 var _self  = this
+				 console.log(_self.userInfo)
 				 uni.request({
 				 	url:_self.$api+"Index/Case_Details",
 					data:{
-						 Id:79,
-						 Type_Id:8
+						 Id:_self.Id,
+						 Type_Id:_self.Charging_Method
 					},
 					success:function(res){
 						console.log(res)
-						
-						 let arr=res.data.Get_Customer_Information
+						 let arr= res.data.Get_Customer_Information
 						        _self.custom_Id = arr.Id
 						        _self.search = arr.Customer_Name_Zh
 								_self.cardNo = arr.Customer_Number
@@ -504,6 +513,7 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 								_self.zhiwu = arr.Position
 								//案件信息
 								let caseInfo = res.data.Get_Case_Information
+								 _self.Case_Id = caseInfo.Id
 								_self.value = caseInfo.One_Type_Id
 								_self.getTwoMenu(_self.value)
 								_self.value1= caseInfo.Two_Type_Id
@@ -517,13 +527,18 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 								_self.oppositeParty = caseInfo.Party_Name
 								_self.textarea=caseInfo.Case_Introduction
 								_self.Service_Content=caseInfo.Service_Content
-								
 								//案件律师信息
 								_self.layWerInfoArr = res.data.Get_Lawyer_Information
+								console.log(_self.layWerInfoArr)
+								_self.inputArr = []
 								for(var i in _self.layWerInfoArr){
 								_self.inputArr.push({laywerName:_self.layWerInfoArr[i].Staff_Name,visible:false,laywerJob:_self.layWerInfoArr[i].Case_Rule_Id,laywerName1:'',Id:_self.layWerInfoArr[i].Id,Case_Rule_Id:_self.layWerInfoArr[i].Case_Rule_Id,Lawyer_Id:_self.layWerInfoArr[i].Id})
-									}   
+									}
+								_self.userInfo = _self.inputArr.slice(1)
+									console.log(_self.inputArr)
+									console.log(_self.userInfo)
 								_self.costValue = res.data.Id
+								console.log(res.data.Id)
 								//风险收费
 								if(_self.costValue == 10){
 								        var ChargeInfoArr = res.data.Charge
@@ -531,8 +546,8 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 								          for(var i in ChargeInfoArr){
 								            _self.riskArr.push({riskCondition:ChargeInfoArr[i].Risk_Achievement,Risk_Achievement:ChargeInfoArr[i].Risk_Achievement})
 								         }
-								        _self.timeArr=[{dateName:'',payCount:'',describe:''}]
-								        _self.nameJobArr=[{nameJobName:'',nameJobJob:'',nameJobRate:'',visible:false,nameJobName1:'',Id:''}]
+								        _self.timeArr=[{describe:'',payCount:'',dateName:'',Payment_Time:'',Charge_Amount:'',Describe:''}]
+								        _self.nameJobArr=[{nameJobRate:'',Rate:'',visible:false,nameJobName1:'',nameJobName:'',nameJobJob:'',Lawyer_Id:'',Rule_Id:'',Id:''}]
 								        _self.riskAcount = _self.riskArr.slice(1)
 								        _self.nameJob = _self.nameJobArr.slice(1)
 								        _self.payDate = _self.timeArr.slice(1)					            
@@ -559,8 +574,8 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 									   for(var i in ChargeInfoArr){
 									      _self.timeArr.push({describe:ChargeInfoArr[i].Describe,payCount:ChargeInfoArr[i].Charge_Amount,dateName:ChargeInfoArr[i].Payment_Time,Payment_Time:ChargeInfoArr[i].Payment_Time,Charge_Amount:ChargeInfoArr[i].Charge_Amount,Describe:ChargeInfoArr[i].Describe})
 									  }
-									  _self.riskArr=[{riskCondition:'',Risk_Achievement:'',Id:""}]
-									  _self.nameJobArr=[{nameJobRate:'',Rate:'',visible:false,nameJobName1:'',nameJobName:'',nameJobJob:'',Lawyer_Id:'',Rule_Id:'',Id:""}]
+									  _self.riskArr=[{riskCondition:'',Risk_Achievement:''}]
+									  _self.nameJobArr=[{nameJobRate:'',Rate:'',visible:false,nameJobName1:'',nameJobName:'',nameJobJob:'',Lawyer_Id:'',Rule_Id:'',Id:''}]
 									  
 									   _self.riskAcount = _self.riskArr.slice(1)
 									  _self.nameJob = _self.nameJobArr.slice(1)
@@ -570,7 +585,7 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 					}
 				 })
         },
-			 addAll(){
+			addAll(){
 		   console.log(this.nameJobArr)
            this.checkData()
             if(this.checkData() == false){
@@ -592,129 +607,119 @@ import wPicker from "@/components/w-picker/w-picker.vue";
             if(this.costValue == 8){
             addJson = {
               // 'userId':localStorage.getItem('userId'),
-			  'userId':uni.getStorageSync("userId"),
-              'costId':this.customId,
-              'userNameC':this.search,
-            // 'userNameE':this.userNameE,
-              'province':this.province,
-              'address':this.address,
-              'tel':this.tel,
-              'type':this.customValue,
-              'suoshuhangye':this.suoshuValue, 
-              'job':this.zhiwu,
-              'is':this.isValue,
-              'cardNo':this.cardNo,
-              'compony':this.compony,
-              'oppositePart':this.oppositeParty,
-              'caseWhy':this.caseWhy1,
-                    //服务内容
-              'Service_Content':this.Service_Content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;'),
-               //标的额
-                'Target':this.biaodie,
+			  'User_Id':uni.getStorageSync("userId"),
+			  'Customer_Id':this.custom_Id,//客户Id
+			  'Case_Id':this.Case_Id,//案件Id
+			  'Chinese_Name':this.search,
+			  'City':this.province,
+			  'Detailed_Address':this.address,
+			  
+			  'Contact_Party':this.tel,//联系方式
+              'Customer_Type_Id':this.customValue,//客户类别Id
+              'industry_Id':this.suoshuValue, //行业ID
+              'Position':this.zhiwu,//职业
+              'Identification':this.isValue,//是否常年
+              'Customer_Number':this.cardNo,//客户编号
 
-              'caseValue':this.value,
-              'caseValue2':this.value1,
-              'caseName':this.caseName,
-              'caseWay':this.caseWay,
-              'textarea':this.textarea,
-              'laywerArr':this.inputArr,
-            //   'partyArr':this.input1Arr,
+              'Receiving_Organ':this.compony,//案件受理机关
+              'Party_Name':this.oppositeParty,//对方当事人
+              'Cause_Id':this.caseWhy1,//案由Id
+			  
+			  'Case_Type':this.value1,//二级案件类别
+              'Case_Name':this.caseName,//案件名称
+			  'Case_Introduction':this.textarea,
+			   'Laywer_Arr':this.inputArr,
+                    //服务内容
+              'Service_Content':this.Service_Content,
+			  'Source_Contract':this.fileType,
+               //标的额
+              'Target':this.biaodie,
+			//合同
+            'File_Name':this.File_Name,
+            'Suffix_Name':this.Suffix_Name,
+            'fileName':this.fileName1,
+            'size':this.size,
+            'caseWay':this.caseWay,
+            "Charging_Method":this.costValue,//收费方式id
+            'Time_Arr':this.nameJobArr//费率数组
+            }
+          }
+            if(this.costValue == 9){
+  addJson = {
+              'User_Id':uni.getStorageSync("userId"),
+              'Customer_Id':this.custom_Id,//客户Id
+              'Case_Id':this.Case_Id,//案件Id
+              'Chinese_Name':this.search,
+              'City':this.province,
+              'Detailed_Address':this.address,
+              
+              'Contact_Party':this.tel,//联系方式
+              'Customer_Type_Id':this.customValue,//客户类别Id
+              'industry_Id':this.suoshuValue, //行业ID
+              'Position':this.zhiwu,//职业
+              'Identification':this.isValue,//是否常年
+              'Customer_Number':this.cardNo,//客户编号
+            
+              'Receiving_Organ':this.compony,//案件受理机关
+              'Party_Name':this.oppositeParty,//对方当事人
+              'Cause_Id':this.caseWhy1,//案由Id
+              
+              'Case_Type':this.value1,//二级案件类别
+              'Case_Name':this.caseName,//案件名称
+              'Case_Introduction':this.textarea,
+               'Laywer_Arr':this.inputArr,
+                    //服务内容
+              'Service_Content':this.Service_Content,
+              'Source_Contract':this.fileType,
+               //标的额
+              'Target':this.biaodie,
             //合同
             'File_Name':this.File_Name,
             'Suffix_Name':this.Suffix_Name,
             'fileName':this.fileName1,
             'size':this.size,
-            'Source_Contract':this.fileType,
-
-            "costValue":this.costValue,
-            'nameJobArr':this.nameJobArr
-              
-                }
-          }
-            
-            if(this.costValue == 9){
-  addJson = {
-               'userId':uni.getStorageSync("userId"),
-              'costId':this.customId,
-             
-             'userNameC':this.search,
-            //   'userNameE':this.userNameE,
-              'province':this.province,
-              'address':this.address,
-               'suoshuhangye':this.suoshuValue,
-                'type':this.customValue,
-                'tel':this.tel,
-               'job':this.zhiwu,
-             
-             //服务内容
-                'Service_Content':this.Service_Content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;'),
-                 //标的额
-                'Target':this.biaodie,
-             
-                'is':this.isValue,
-                'cardNo':this.cardNo,
-                'compony':this.compony,
-                'oppositePart':this.oppositeParty,
-                'caseWhy':this.caseWhy1,
-
-
-               'caseValue':this.value,
-             'caseValue2':this.value1,
-                'caseName':this.caseName,
-                'caseWay':this.caseWay,
-                'textarea':this.textarea,
-
-              'laywerArr':this.inputArr,
-            //   'partyArr':this.input1Arr,
-                'File_Name':this.File_Name,
-                'Suffix_Name':this.Suffix_Name,
-                'fileName':this.fileName1,
-                'size':this.size,
-                'Source_Contract':this.fileType,
-                "costValue":this.costValue,
-               'timeArr':this.timeArr,
+            'caseWay':this.caseWay,
+            "Charging_Method":this.costValue,//收费方式id
+             'Fixed_Arr':this.timeArr,//定额
             }
             }
             if(this.costValue == 10){
     addJson = {
-               'userId':uni.getStorageSync("userId"),
-              'costId':this.customId,
-              'userNameC':this.search,
-            //   'userNameE':this.userNameE,
-              'province':this.province,
-              'address':this.address,
-              'tel':this.tel,
-              'type':this.customValue,
-              'suoshuhangye':this.suoshuValue,
-              'job':this.zhiwu,
-
-
-                    //服务内容
-                'Service_Content':this.Service_Content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;'),
-                 //标的额
-                'Target':this.biaodie,
-              'is':this.isValue,
-                'cardNo':this.cardNo,
-                'compony':this.compony,
-                'oppositePart':this.oppositeParty,
-                'caseWhy':this.caseWhy1,
-                'Source_Contract':this.fileType,
-                'caseValue':this.value,
-              'caseValue2':this.value1,
-                'caseName':this.caseName,
-                'caseWay':this.caseWay,
-                'textarea':this.textarea,
-
-
-              'laywerArr':this.inputArr,
-            //   'partyArr':this.input1Arr,
-                'File_Name':this.File_Name,
-                'Suffix_Name':this.Suffix_Name,
-                'fileName':this.fileName1,
-                'size':this.size,
-
-              "costValue":this.costValue,
-              'riskArr':this.riskArr, 
+                'User_Id':uni.getStorageSync("userId"),
+               'Customer_Id':this.custom_Id,//客户Id
+               'Case_Id':this.Case_Id,//案件Id
+               'Chinese_Name':this.search,
+               'City':this.province,
+               'Detailed_Address':this.address,
+               
+               'Contact_Party':this.tel,//联系方式
+               'Customer_Type_Id':this.customValue,//客户类别Id
+               'industry_Id':this.suoshuValue, //行业ID
+               'Position':this.zhiwu,//职业
+               'Identification':this.isValue,//是否常年
+               'Customer_Number':this.cardNo,//客户编号
+             
+               'Receiving_Organ':this.compony,//案件受理机关
+               'Party_Name':this.oppositeParty,//对方当事人
+               'Cause_Id':this.caseWhy1,//案由Id
+               
+               'Case_Type':this.value1,//二级案件类别
+               'Case_Name':this.caseName,//案件名称
+               'Case_Introduction':this.textarea,
+                'Laywer_Arr':this.inputArr,
+                     //服务内容
+               'Service_Content':this.Service_Content,
+               'Source_Contract':this.fileType,
+                //标的额
+               'Target':this.biaodie,
+             //合同
+             'File_Name':this.File_Name,
+             'Suffix_Name':this.Suffix_Name,
+             'fileName':this.fileName1,
+             'size':this.size,
+             'caseWay':this.caseWay,
+             "Charging_Method":this.costValue,//收费方式id
+             'Risk_Arr':this.riskArr, //风险
             }
             }
         addJson = JSON.stringify(addJson)
@@ -730,16 +735,16 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 				console.log(res)
 				 if(res.data == true){
 					 uni.showToast({
-					        title:'添加成功',
+					        title:'更新成功',
 					 		duration:2000
 					  });
-					  uni.navigateTo({
-					  	url:'../pages/index/index'
+					  uni.switchTab({
+					  	 	url:'../index/index'
 					  })
 					   return false
 					 }else{        
 						uni.showToast({
-					        title:'添加失败',
+					        title:'更新失败',
 					        duration:2000
 					          });
 					        return false
@@ -901,7 +906,7 @@ uni.showToast({
             }
             var arr=[]
             for(var i in this.inputArr){
-                arr.push(this.inputArr[i].Id)
+                arr.push(this.inputArr[i].Lawyer_Id)
             }
            
             //console.log(arr)
@@ -929,7 +934,7 @@ uni.showToast({
 
              var arrJob=[]
             for(var i in this.inputArr){
-                arrJob.push(this.inputArr[i].laywerJob)
+                arrJob.push(this.inputArr[i].Case_Rule_Id)
             }
             if (arrJob.indexOf('') != -1){
                  
@@ -942,7 +947,7 @@ uni.showToast({
          
          var arrJob1=[]
             for(var i in this.inputArr){
-                arrJob1.push(this.inputArr[i].laywerJob)
+                arrJob1.push(this.inputArr[i].Case_Rule_Id)
             }
             //console.log(arrJob1) //false
            if(arrJob1.indexOf(18) == -1){
@@ -953,7 +958,19 @@ uni.showToast({
                 });
                 return false
             }
-            
+			console.log(arrJob1)
+			//主编律师只能唯一
+			 var nary1=arrJob1.sort();
+            for(var i=0;i<arrJob1.length;i++){
+                if (nary1[i]==nary1[i+1]){  
+           uni.showToast({
+                   title:'最多一位主办律师',
+                   duration:2000
+                   });
+                   return false
+               }
+                 
+            }
             //服务内容
               if(this.Service_Content==""||this.Service_Content==null){
                 
@@ -967,7 +984,7 @@ uni.showToast({
                 if(this.biaodie ==""||this.biaodie==null){
                 
 uni.showToast({
-                    title:'服务内容不能为空',
+                    title:'标的额不能为空',
                     duration:2000
                 });
                 return false
@@ -1012,7 +1029,7 @@ uni.showToast({
 
             var arrJobArr8=[]
             for(var i in this.nameJobArr){
-                arrJobArr8.push(this.nameJobArr[i].Id)
+                arrJobArr8.push(this.nameJobArr[i].Lawyer_Id)
             }
             if (arrJobArr8.indexOf('') != -1){
                  
@@ -1036,7 +1053,7 @@ uni.showToast({
 
             var arrJobArrJob81=[]
             for(var i in this.nameJobArr){
-                arrJobArrJob81.push(this.nameJobArr[i].nameJobJob)
+                arrJobArrJob81.push(this.nameJobArr[i].Rule_Id)
             }
             if (arrJobArrJob81.indexOf('') != -1){
                  
@@ -1050,7 +1067,7 @@ uni.showToast({
 
              var arrJobJobRate8=[]
             for(var i in this.nameJobArr){
-                arrJobJobRate8.push(this.nameJobArr[i].nameJobRate)
+                arrJobJobRate8.push(this.nameJobArr[i].Rate)
             }
             if (arrJobJobRate8.indexOf('') != -1){
                  
@@ -1065,7 +1082,7 @@ uni.showToast({
          if(this.costValue==9){
             var arr9=[]
             for(var i in this.timeArr){
-                arr9.push(this.timeArr[i].dateName)
+                arr9.push(this.timeArr[i].Payment_Time)
             }
             if (arr9.indexOf('') != -1){
                  
@@ -1078,7 +1095,7 @@ uni.showToast({
 
             var arrMoney=[]
             for(var i in this.timeArr){
-                arrMoney.push(this.timeArr[i].payCount)
+                arrMoney.push(this.timeArr[i].Charge_Amount)
             }
             if (arrMoney.indexOf('') != -1){
                  
@@ -1092,7 +1109,7 @@ uni.showToast({
 
              var arrdescribe=[]
             for(var i in this.timeArr){
-                arrdescribe.push(this.timeArr[i].describe)
+                arrdescribe.push(this.timeArr[i].Describe)
             }
             if (arrdescribe.indexOf('') != -1){
                  
@@ -1107,7 +1124,7 @@ uni.showToast({
     if(this.costValue==10){
             var arr10=[]
             for(var i in this.riskArr){
-                arr10.push(this.riskArr[i].riskCondition)
+                arr10.push(this.riskArr[i].Risk_Achievement)
             }
             if (arr10.indexOf('') != -1){
                  
@@ -1232,15 +1249,27 @@ uni.showToast({
           
 			},
 			changeOneMenu(e){
+				var _self = this
 				console.log(e)
 				this.value = e
+				_self.caseWhy=""
+				_self.caseWhy1=""
 				this.getCaseResonList(e)
 				this.getTwoMenu(e)
 			},
 			changeTwoMenu(e){
 				this.value1 = e
 			},
-			changeCustomer(){},
+			changeCustomer(id){
+				//  this.customId = 0
+                 // this.province=''
+                  //this.address = ''
+                 // this.tel=''
+                  this.suoshuValue = ''
+                  this.zhiwu = ''
+                  this.cardNo=''
+                  //this.isValue=''
+			},
 			addCase(){
 				var _self =this
 		    _self.userInfo.push(1)
@@ -1252,15 +1281,17 @@ uni.showToast({
 			},
 			addContract(){  
             this.riskAcount.push(1)
-            this.riskArr.push({riskName:'',riskCount:'',riskCondition:''})  
+            this.riskArr.push({riskCondition:'',Risk_Achievement:''})
 			},	
 			bindDateChange: function(e) {
-            this.timeArr[0].dateName = e.target.value
+			console.log(e)
+			console.log( this.timeArr)
+            this.timeArr[0].Payment_Time = e.target.value
 			},
 			bindDateChange1: function(e) {
 				var index =  parseInt(e.target.dataset.index)+1
 				console.log(index)
-				this.timeArr[index].dateName = e.target.value
+				this.timeArr[index].Payment_Time = e.target.value
 			},
 			  getDate(type) {
             const date = new Date();
@@ -1279,11 +1310,13 @@ uni.showToast({
         },
 		addPayDate(){
 			this.payDate.push(1)
-            this.timeArr.push({dateName:'',payCount:'',describe:''})  
+            //this.timeArr.push({dateName:'',payCount:'',describe:''})  
+			  this.timeArr.push({describe:'',payCount:'',dateName:'',Payment_Time:'',Charge_Amount:'',Describe:''})  
 		},
 		addNameJob(){
 			this.nameJob.push(1)
-            this.nameJobArr.push({nameJobName:'',nameJobJob:'',nameJobRate:'',visible:false,nameJobName1:'',Id:''})  
+            //this.nameJobArr.push({nameJobName:'',nameJobJob:'',nameJobRate:'',visible:false,nameJobName1:'',Id:''})  
+			this.nameJobArr.push({nameJobRate:'',Rate:'',visible:false,nameJobName1:'',nameJobName:'',nameJobJob:'',Lawyer_Id:'',Rule_Id:''})
 		},
 		picUpload(){
 			uni.chooseImage({
@@ -1369,9 +1402,13 @@ uni.showToast({
 </script>
 
 <style lang="scss">
+.add{
+	width: 100%;
+	overflow-x:hidden;
+}
 	$width:20%;
 	select{
-		background: #ffffff;
+		// background: #ffffff;
 		margin-right: 10upx;
 	}
 .img{

@@ -25,17 +25,19 @@
 	export default {
 		data() {
 			return {
-				
+				code:"",
 			}
 		},
 		onLoad(){
-			if(uni.getStorageSync("userId")){
+			console.log(uni.getStorageSync("userId"))
+			if(uni.getStorageSync("userId")||uni.getStorageSync("userId")===0){
 				uni.switchTab({
 					url:"../index/index"
 				})
 			}
 		},
 		onshow(){
+			console.log(uni.getStorageSync("userId"))
 			if(uni.getStorageSync("userId")){
 				uni.switchTab({
 					url:"../index/index"
@@ -44,16 +46,17 @@
 		},
 		methods: {
 			goToUserLogin:function(){
-				console.log("1111111")
+		
 				uni.navigateTo({
 					url:"../loginUser/loginUser"
 				})
 			}, 
 			weixinLogin:function(){
-				
-				  location.href = "http://k23iqh.natappfree.cc/Wechat/doGet"
+				uni.setStorageSync("weixin",1)
+				location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4c958b0745e83859&redirect_uri=http://lsmsqd.gzbigbang.net/pages/weixin/weixin&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
 			},
-		}
+		},
+		
 	}  
 </script>
 

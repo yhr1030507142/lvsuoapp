@@ -8,12 +8,12 @@
 		</view>
 		<view class="input m_200">
 			<image src="../../static/img/shouji.png" mode="" class="icon"></image>
-			<input type="text" class="input1" placeholder="请输入账号" v-model="username">
+			<input type="number" class="input1" placeholder="请输入账号" v-model="username" autocomplete='off'  @focus="hideTabbar" @blur="showOldView">
 		</view>
 		
 		<view class="input">
 			<image src="../../static/img/mima.png" mode="" class="icon"></image>
-			<input type="text" class="input1" placeholder="请输入密码" v-model="password">
+			<input type="password" class="input1" placeholder="请输入密码"  autocomplete='off' v-model="password" @click="showOldView" @focus="showOldView" @blur="showOldView">
 		</view>
 		
 		<view class="btn btn1 flex row" @tap="denglu()">
@@ -25,7 +25,7 @@
 			 	<view  class="pic_img">
 					<image src="../../static/img/weixin1.png" mode="" style="width: 100%;height: 100%;"></image>
 				</view>
-			 	<view class="">
+			 	<view class="" @tap="gotoLogin()">
 			 		微信账号登录
 			 	</view>
 			 </view>
@@ -34,7 +34,9 @@
 </template>
 
 <script>
+	
 	var Encrypt = require('jsencrypt/bin/jsencrypt')
+	import md5 from 'js-md5';
 	import qs from 'qs';
 	export default {
 		data() {
@@ -42,11 +44,25 @@
 				password:"", 
 				username:"",
 				pub:"",
+				 tabbar: true,
+            windowHeight: ''
 			}
-		},
+		}, 
 		onLoad:function(){
 			var _self =this
-			_self.getPublicKey()
+			//_self.getPublicKey()
+	uni.getSystemInfo({
+        success: (res)=> {
+            this.windowHeight = res.windowHeight;
+        }
+    });    
+//     uni.onWindowResize((res) => {
+//         if(res.size.windowHeight < this.windowHeight){
+//             this.tabbar = false
+//         }else{
+//             this.tabbar = true
+//         }
+//     })
 		},
 		methods: {
 			checknumber:function(String) { 
@@ -83,30 +99,21 @@
 				 uni.showToast({
 					title: '用户名格式错误',
 					icon: "none"
-				});
+				}); 
                 return false
             }
-
-
-			var encrypt = new Encrypt.JSEncrypt();
-			console.log(_self.pub)
-            encrypt.setPublicKey(_self.pub)
-            var str = _self.username+'&&'+_self.password
-            var encrypted = encrypt.encrypt(str);
-          // 加密后的密文  
+            var str = _self.username+'&&'+md5(_self.password)
             var data = qs.stringify({
-                str:encrypted
+                str:str
             });
-			console.log(data)
-			// return false
 			uni.request({
 				url:_self.$api+"Login/Judging_Landing",
 				method:"POST",
 				header:{ 'Content-Type': 'application/x-www-form-urlencoded'}, //multipart/form-data;boundary=--xxxxxxx   application/json},
-				data:qs.stringify({str:encrypted}),
+				data:qs.stringify({str:str}),
 				success:function(res){
 				console.log(res)
-				var str = res.data; 
+				// var str = res.data; 
                  if(res.data == 1){
 					 uni.showToast({
 						title: '用户名错误',
@@ -131,14 +138,14 @@
 				  if(res.data == 5){
 									uni.showModal({
 									title: '提示',
-									content: '此账号已在其他地方登录, 是否继续登录?',
+									content: ' 此账号已在其他地方登录, 是否继续登录? ',
 									success: function (res) {
 										if (res.confirm) {
 											uni.request({
 												url:_self.$api+"Login/Occupancy_Landing",
 												method:"POST",
 												header:{ 'Content-Type': 'application/x-www-form-urlencoded'}, //multipart/form-data;boundary=--xxxxxxx   application/json},
-												data:qs.stringify({str:encrypted}),
+												data:qs.stringify({str:str}),
 												success:function(res){
 														  console.log(res)
 													      uni.setStorageSync('userId',res.data.User_Id)
@@ -179,7 +186,7 @@
 						url:_self.$api+"Login/Rsa_Land",
 						method:"POST",
 						header:{ 'Content-Type': 'application/x-www-form-urlencoded'}, //multipart/form-data;boundary=--xxxxxxx   application/json},
-						data:qs.stringify({str:encrypted}),
+						data:qs.stringify({str:str}),
 						success: function(res){
 							console.log(res)
 						uni.setStorageSync('userId',res.data.User_Id)
@@ -197,24 +204,47 @@
 					}
 				})
 			  },
-			 getPublicKey(){
-				 var _self =this
-						uni.request({
-							url:_self.$api+"Login/PublicKey",
-							success:function(res){
-								_self.pub = res.data.PublicKey
-								console.log(_self.pub)
-							}
-						})
-				},
+			  gotoLogin(){
+				  uni.navigateTo({
+				  	url:"../login/login"
+				  })
+			  },
+			  showOldView(){
+				  uni.pageScrollTo({
+				  	scrollTop:0
+				  })
+			  },
+			 // getPublicKey(){
+				//  var _self =this
+				// 		uni.request({
+				// 			url:_self.$api+"Login/PublicKey",
+				// 			success:function(res){
+				// 				_self.pub = res.data.PublicKey
+				// 				console.log(_self.pub)
+				// 			}
+				// 		})
+				// },
+				showTabbar(){
+        // this.tabbar = true;
+    },
+    hideTabbar(){
+		// uni.pageScrollTo({
+		// 	scrollTop:600
+		// })
+		// this.showOldView()
+  //       this.tabbar = false;
+    }
 			}
 		}
 	
 </script>
 
 <style lang="scss">
+.content{
+	height: 100%;
+}
 .logo{
-	margin-top: 150upx; 
+	padding-top: 100upx; 
 	width: 100%;
 	height: 150upx;
 	.img{
@@ -251,12 +281,12 @@
 .bottom{
 	width: 90%;
 	padding: 0;
-	margin: 0 auto;
+	margin: 50upx auto;
 	align-items: center;
 	font-size: 32upx;
 	color: #999999;
-	position: fixed;
-	bottom: 20upx;
+	// position: fixed;
+	// bottom: 20upx;
 	height: 60upx;
 	display: flex;
 	flex-direction: row;
@@ -283,7 +313,7 @@
 	padding: 0;
 	list-style: none;
 	outline: none;
-	margin-top: 150upx;
+	margin-top: 100upx;
 	height: 100upx;
 	display: flex;
 	flex-direction: row;

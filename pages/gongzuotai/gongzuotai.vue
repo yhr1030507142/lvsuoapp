@@ -3,11 +3,10 @@
 		<view class="box">
 			<ul class="ul">
 				<li class="li" @tap="goLiyi()">利益检索</li>
-				<!-- <li class="li" @tap="goWenDang()">文档</li> -->
 				<li class="li" @tap="goTongji()">统计</li>
+				<li class="li" @tap="luyin()">录音</li> 
 				<li class="li" @tap="tuichu()">退出</li>
-				<!-- <li class="li">文档</li>
-				<li class="li">审核</li> -->
+				
 			</ul>
 		</view>
 	</view>
@@ -19,6 +18,51 @@
 			return {
 				
 			}
+		},
+		onLoad:function(){
+			var _self = this 
+				uni.request({
+		url:_self.$api+"Login/Sel_Login_Status",
+		data:{sessionId:uni.getStorageSync('sessionId'),User_Id:uni.getStorageSync('userId')},
+		success:function(res){
+			console.log(res)
+			 if(res.data == 1){
+					uni.showToast({
+					    title:'账号异地登陆 强制退出',
+					     duration:2000,
+						 success:function(){
+							  uni.removeStorageSync('userId')
+							 uni.removeStorageSync('sessionId')
+							 uni.removeStorageSync('Rule_Id')
+							 uni.removeStorageSync('Expiration_Date') 
+							 uni.removeStorageSync('Username')
+							 uni.navigateTo({
+							 	url: '../login/login',
+							 });
+							       return false
+						 }
+					});
+			
+			  }
+			   if(res.data == 3){
+				   	uni.showToast({
+				       title:'登录已过期',
+				        duration:2000,
+						success:function(){
+							uni.removeStorageSync('userId')
+							uni.removeStorageSync('sessionId')
+							uni.removeStorageSync('Rule_Id')
+							uni.removeStorageSync('Expiration_Date') 
+							uni.removeStorageSync('Username')
+							uni.navigateTo({
+								url: '../login/login',
+							});
+							      return false
+						}
+				   });
+				}
+			}
+		})     
 		},
 		methods: {
 			goLiyi:function(){
@@ -34,6 +78,11 @@
 			goWenDang:function(){
 				uni.navigateTo({ 
 					url:'../wendang/wendang'
+				})
+			},
+			luyin:function(){
+				uni.navigateTo({
+					url:'../luyin/luyin'
 				})
 			},
 			tuichu:function(){

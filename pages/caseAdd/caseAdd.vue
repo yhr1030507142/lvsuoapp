@@ -16,7 +16,7 @@
 							
 						<select class="select" @change="changeCustomer()" v-model="customValue">
 							<option value="" disabled selected hidden>请选择客户类型</option>
-							<option :value="v.value" v-for="(v,i) in customTypeArr" :key="i">{{v.label}}</option>
+							<option :value="v.Id" v-for="(v,i) in customTypeArr" :key="i">{{v.Value}}</option>
 						</select>
 							
 						 <select class="select"  v-model="isValue">
@@ -24,9 +24,9 @@
 							<option  :value="v.Id" v-for="(v,i) in isValueArr" :key="i">{{v.Value}}</option>
 						</select>
 							
-							 <select class="select" v-show="customValue==4" v-model="suoshuValue">
+							 <select class="select" v-show="customValue!=3&&customValue!=14" v-model="suoshuValue">
 								 <option value="" disabled selected hidden>请选择所属行业</option>
-								<option  :value="v1.Id" v-for="(v1,i1) in suoshuhangyeArr" :key="i1">{{v1.Value}}</option>
+								 <option  :value="v1.Id" v-for="(v1,i1) in suoshuhangyeArr" :key="i1">{{v1.Value}}</option>
 							</select>
 						</view>
 						
@@ -35,15 +35,15 @@
 									<p class="info_p">客户名称</p>
 									<input type="text" v-model="search">
 							</div>
-								<div class="info flex row" v-show="customValue==3">
+								<div class="info flex row" v-show="customValue==3 || customValue==14">
 										<p class="info_p">证件</p>
 										<input type="text" v-model="cardNo">
 								</div>
-									<div class="info flex row" v-show="customValue==4">
+									<div class="info flex row" v-show="customValue!=3&&customValue!=14">
 										<p class="info_p">纳税人编号</p>
 										<input type="text" v-model="cardNo">
 								</div>
-								<div class="info flex row" v-show="customValue==4">
+								<div class="info flex row" v-show="customValue!=3&&customValue!=14">
 										<p class="info_p">职务</p>
 										<input type="text" v-model="zhiwu">
 								</div>
@@ -123,6 +123,7 @@
 											<p class="info_p">对方当事人</p>
 											<input type="text" v-model="oppositeParty">
 									</div>
+									
 	 						</view>	
 	 							
 	 				</view>
@@ -155,8 +156,10 @@
 									
 									
 									<view class="content_middle_view_child_bottom_info flex col">
+										<quill-editor class="editor" v-model="Service_Content" ref="myQuillEditor" :options="editorOption" style="width:90%;margin: 0 auto; height: 200upx;border:1upx solid #999">
+										</quill-editor>
 											<!-- <rich-text :nodes="Service_Content" class="textarea"></rich-text> -->
-											<textarea value="" placeholder="" v-model="Service_Content" class="textarea"/>
+											<!-- <textarea value="" placeholder="" v-model="Service_Content" class="textarea"/> -->
 									</view>	
 										
 							</view>
@@ -386,8 +389,48 @@
 		</view>
 	</view>
 	<!--  -->
-
-		
+<!--  -->
+<view class="content_middle_view">
+		<view class="content_middle_view_child flex col" style="padding-bottom: 0;">
+			
+				<view class="content_middle_view_child_header flex row">
+					<view class="shoufeifangshi">
+							<p class="shoufeifangshi_p">上传图片或视频</p>
+					<!-- 	<select name="" id="" class="shoufeifangshi_select" v-model="fileType">
+							<option :value="v.Id" v-for="(v,i) in fileTypeArr" :key="i">{{v.value}}</option>
+						</select> -->
+						
+					</view>
+					 
+					
+				</view>
+				 <view class="flex row">
+					 <view class="shangchuan_btn"  @click="picUpload()">上传图片</view>
+				 <view class="shangchuan_btn"  @click="picUpload1()" style="margin-left: 20upx;">上传视频</view>
+				 </view>
+				
+		</view>
+	</view>
+<!--  -->
+	<!--  -->
+	<view class="content_middle_view">
+			<view class="content_middle_view_child flex col" style="padding-bottom: 0;">
+				
+					<view class="content_middle_view_child_header flex row">
+						<view class="shoufeifangshi">
+								<p class="shoufeifangshi_p">录音(60s语音)</p>
+						</view>
+						 <view class="shangchuan_btn"  @click="picUpload()">录音</view> 
+					</view>
+					<view>录音时间{{time}}</view>
+					<view>刚录完的语音:{{word}}</view> 
+					
+					<view class="list">
+					    <audio ref="player" src="http://lsms.gzbigbang.net/LSMSFolde/aaa.mp3"  controls></audio>
+					</view>
+			</view>
+		</view>
+	<!--  -->	
 	</view>
 	<view class="btn_box flex row row_between">
 	<view class="btn btn1" @tap="look()">预览合同</view>
@@ -399,6 +442,8 @@
 <script>
 	 import {mapState,mapMutations} from 'vuex';
 import wPicker from "@/components/w-picker/w-picker.vue";
+import wx from 'weixin-js-sdk'
+const _this = wx
 // import { DatetimePicker } from 'mint-ui';
 	export default { 
 		data() {
@@ -406,6 +451,15 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 				format: true
 			})
 			return { 
+				//录音
+				localId: '',
+				serverId: '',
+				downLoadId: '',
+				Soff: true,
+				time: 0,
+				timer: null,
+				word:'无',
+				//
 				value:'',
 				value1:'',
 				value2:0, 
@@ -431,7 +485,7 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 				suoshuhangyeArr:[],
 				suoshuValue:"",
 				 isValueArr:[
-                {Id:1,Value:'是'},{Id:2,Value:'否'},
+					{Id:1,Value:'是'},{Id:2,Value:'否'},
 					],
 					customId:0,
 					isValue:"",
@@ -462,21 +516,67 @@ import wPicker from "@/components/w-picker/w-picker.vue";
 					 'Suffix_Name':"",
 					 'fileName1':"",
 					 'size':"",
+					 editorOption: {
+					 	modules: {
+					 
+					 	},
+					 	placeholder: '',
+					 	theme: ''
+					 },
 					 
 				
 			}
 		}, 
 		onLoad() {
 			var _self =this
+				_self.configPage()
+				_self.getCustomList()
 				_self.getSuoshuhangye()
 				_self.getOneMenu()
 				_self.getXialaList()
-			 
+				
 		},
 		onShow(){
 	
 		},
 		methods: {
+					configPage(){
+					  var _self = this
+					  alert(location.href)
+					  console.log(location.href.split('#')[0])
+					  var data = {url:location.href.split('#')[0],AppId:'wxc9722e78824af65f',AppSecret:'2521b18d19e16fc99408992572338251'}
+					  console.log(data) 
+					  uni.request({
+					  		url:_self.$api+"Wechar/Sound",
+					  		data:data,
+					  		success:function(res){
+					  		console.log(res)
+					  		 _this.config({
+					  		  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+					  		  appId: 'wxc9722e78824af65f', // 必填，公众号的唯一标识
+					  		  timestamp:res.data.timestamp, // 必填，生成签名的时间戳
+					  		  nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
+					  		  signature:res.data.signature, // 必填，签名
+					  		  jsApiList: ['startRecord','stopRecord', 'playVoice', 'pauseVoice','translateVoice', 'stopVoice', 'uploadVoice', 'downloadVoice'] ,// 必填，需要使用的JS接口列表
+					  		  // 接口 开始录音接口 停止录音接口 播放语音接口 暂停播放接口 停止播放接口 上传语音接口 下载语音接口 识别音频并返回识别结果接口
+					  		}) 
+					  		// config信息验证后才执行 
+					  _this.ready(() => { 
+					  		// 		wx.checkJsApi({
+					  		//     jsApiList: ['startRecord','stopRecord', 'playVoice', 'pauseVoice','translateVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'downloadVoice'] ,// 必填，需要使用的JS接口列表
+					  		//     success: function(res) {
+					  		// 
+					  		//     }
+					  		// });
+					  				})
+					  				// 微信sdk错误返回问题
+					  				_this.error((res) => {
+					  				  alert('出错了：' + res.errMsg)// 这个地方的好处就是wx.config配置错误，会弹出窗口哪里错误，然后根据微信文档查询即可。
+					  				
+					  				})
+					  		}
+					  	})
+			},
 			 addAll(){
            this.checkData()
             if(this.checkData() == false){
@@ -514,7 +614,7 @@ import wPicker from "@/components/w-picker/w-picker.vue";
               'oppositePart':this.oppositeParty,
               'caseWhy':this.caseWhy1,
                     //服务内容
-              'Service_Content':this.Service_Content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;'),
+              'Service_Content':this.Service_Content,
                //标的额
                 'Target':this.biaodie,
 
@@ -553,7 +653,7 @@ import wPicker from "@/components/w-picker/w-picker.vue";
                'job':this.zhiwu,
              
              //服务内容
-                'Service_Content':this.Service_Content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;'),
+                'Service_Content':this.Service_Content,
                  //标的额
                 'Target':this.biaodie,
              
@@ -743,7 +843,7 @@ uni.showToast({
              var myreg = /^((0\d{2,3}-\d{7,8})|(1[34578]\d{9}))$/;
             if (!myreg.test(this.tel)) {
                   
-uni.showToast({
+				uni.showToast({
                     title:'联系电话格式不正确',
                      duration:2000
                 });
@@ -789,14 +889,14 @@ uni.showToast({
                 });
                 return false
             }
-             if(this.textarea==""||this.textarea==null){
-                
-uni.showToast({
-                    title:'请填写案情简介',
-                    duration:2000
-                });
-                return false
-            }
+//              if(this.textarea==""||this.textarea==null){
+//                 
+// uni.showToast({
+//                     title:'请填写案情简介',
+//                     duration:2000
+//                 });
+//                 return false
+//             }
                if(this.oppositeParty==""||this.oppositeParty==null){
                 
 uni.showToast({
@@ -859,51 +959,28 @@ uni.showToast({
                 });
                 return false
             }
-            
+             var nary1=arrJob1.sort();
+             for(var i=0;i<arrJob1.length;i++){
+                 if (nary1[i]==nary1[i+1]){  
+            uni.showToast({
+                    title:'最多一位主办律师',
+                    duration:2000
+                    });
+                    return false
+                }
+             }
             //服务内容
-              if(this.Service_Content==""||this.Service_Content==null){
-                
-uni.showToast({
-                    title:'服务内容不能为空',
-                     duration:2000
-                });
-                return false
-            }
+
              //标的额
                 if(this.biaodie ==""||this.biaodie==null){
                 
 uni.showToast({
-                    title:'服务内容不能为空',
+                    title:'标的额不能为空',
                     duration:2000
                 });
                 return false
             }
             
-            // var arrParty=[]
-            // for(var i in this.input1Arr){
-            //     arrParty.push(this.input1Arr[i].partyName)
-            // }
-            // if (arrParty.indexOf('') != -1){
-            //      
-//		uni.showToast({
-            //         title:'当事人姓名不能为空',
-            //         type:'warning'
-            //     });
-            //     return false
-            // }
-
-            // var arrPartyJob=[]
-            // for(var i in this.input1Arr){
-            //     arrPartyJob.push(this.input1Arr[i].partyJob)
-            // }
-            // if (arrPartyJob.indexOf('') != -1){
-            //      
-			//	uni.showToast({
-            //         title:'请选择当事人类型',
-            //         type:'warning'
-            //     });
-            //     return false
-            // }
 
               if(this.costValue==""||this.costValue==null){
                 
@@ -1045,7 +1122,7 @@ uni.showToast({
             }
                 return true
         },
-			onConfirm(value){
+			onConfirm:function(value){
 				var province = ''
 				console.log(value.defaultVal);
 				var val = value.checkArr
@@ -1059,14 +1136,14 @@ uni.showToast({
 				this.province = province
 				console.log(province)
 			},
-			toggleTab(){
+			toggleTab:function(){
 				this.$refs.picker.show();
 			},
-			toggleTab1(){
+			toggleTab1:function(){
 				this.$refs.picker1.show();
 			},
 			//获取客户行业
-			getSuoshuhangye(){
+			getSuoshuhangye:function(){
 				var _self = this
 				uni.request({
 					url:_self.$api+"Index/Get_All_Customers",
@@ -1076,10 +1153,10 @@ uni.showToast({
 					}
 				})
 			},
-			changeLawyer(e){
+			changeLawyer:function(e){
 				console.log(e)
 			},
-			getId(id,i){
+			getId:function(id,i){
 				
 				// console.log(this.inputArr[0].Id = id)
 			},
@@ -1102,12 +1179,12 @@ uni.showToast({
 				success:function(res){
 					//console.log(res)
 					_self.arr1 = res.data
-					_self.value1 = res.data[0].Id
+					//_self.value1 = res.data[0].Id
 				},
 				})
 				
 			},
-			getXialaList(){
+			getXialaList:function(){
 				var _self= this
 				uni.request({
 				url:_self.$api+'Index/Get_Droplist',
@@ -1123,30 +1200,21 @@ uni.showToast({
 					_self.costWay = res.data.AllCharging
 				},
 				})
-				
-                
-//                 //  this.JobListArr = res.data.Post
-
-//                  
-
-
-// 
-//                       for (let i = 0; i < this.LawyerNameArr.length; i += 1) {
-//                         this.LawyerNameArr[i].value =  this.LawyerNameArr[i].Staff_Name;      
-//                         this.LawyerNameArr[i].Staff_No =  this.LawyerNameArr[i].Staff_No;      
-//                         }
-          
 			},
-			changeOneMenu(e){
+			changeOneMenu:function(e){
+				var _self =this
 				console.log(e)
-				this.value = e
-				this.getCaseResonList(e)
-				this.getTwoMenu(e)
+				_self.value = e
+				_self.caseWhy=""
+				_self.caseWhy1=""
+				_self.value1 =""
+				_self.getCaseResonList(e)
+				_self.getTwoMenu(e)
 			},
-			changeTwoMenu(e){
+			changeTwoMenu:function(e){
 				this.value1 = e
 			},
-			changeCustomer(){},
+			changeCustomer:function(){},
 			addCase(){
 				var _self =this
 		    _self.userInfo.push(1)
@@ -1192,33 +1260,26 @@ uni.showToast({
             this.nameJobArr.push({nameJobName:'',nameJobJob:'',nameJobRate:'',visible:false,nameJobName1:'',Id:''})  
 		},
 		picUpload(){
+			var _self = this
 			uni.chooseImage({
-    success: function (chooseImageRes) {
-        const tempFilePaths = chooseImageRes.tempFilePaths;
-        const uploadTask = uni.uploadFile({
-            url: 'https://www.example.com/upload', //仅为示例，非真实的接口地址
-            filePath: tempFilePaths[0],
-            name: 'file',
-            formData: {
-                'user': 'test'
-            },
-            success: function (uploadFileRes) {
-                console.log(uploadFileRes.data);
-            }
-        });
- 
-        uploadTask.onProgressUpdate(function (res) {
-            console.log('上传进度' + res.progress);
-            console.log('已经上传的数据长度' + res.totalBytesSent);
-            console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
- 
-            // 测试条件，取消上传任务。
-            if (res.progress > 50) {
-                uploadTask.abort();
-            }
-				});
-			}
-		});
+			success: function (chooseImageRes) {
+				console.log(chooseImageRes)
+				const tempFilePaths = chooseImageRes.tempFilePaths;
+				console.log(tempFilePaths)
+				uni.uploadFile({
+					url: _self.$api+'Base/uploadRawFile', //仅为示例，非真实的接口地址
+					filePath: tempFilePaths[0],
+					name: 'file',
+					formData: {
+						'user': 'test'
+					},
+					success: function (uploadFileRes) {
+						console.log(uploadFileRes)
+						console.log(uploadFileRes.data); 
+					}
+				})
+				}
+				})
 		},
 		//预览合同
 		look(){
@@ -1406,6 +1467,16 @@ uni.showToast({
 				// complete: () => {}
 			}); 
         },
+		getCustomList:function(){
+			var _self = this
+			uni.request({
+				url:_self.$api+'Index/Get_Customer_Type',
+				success:function(res){
+					console.log(res)
+					_self.customTypeArr = res.data.Customer_Type
+				}
+			})
+		},
 		},
 		watch:{
 			 
@@ -1427,9 +1498,9 @@ uni.showToast({
 </script>
 
 <style lang="scss">
-	$width:20%;
+	$width:25%;
 	select{
-		background: #ffffff;
+		// background: #ffffff;
 		margin-right: 10upx;
 	}
 .img{
@@ -1620,5 +1691,12 @@ uni.showToast({
 	}
 .shangchuan_btn{
 	width: 150upx;
+	height: 70upx;
+	color: #ffffff;
+	text-align: center;
+	line-height: 70upx;
+	background: #A92A2E; 
+	font-size: 28upx;
+	font-weight: 500;
 }
 </style>

@@ -1,10 +1,8 @@
 <template>
 	<view class="content">
-      <view class="content_header flex row row_between">
+      <view class="content_header flex row row_between m-50">
 		 
-		<!--  <picker class='picker' bindchange='changeOneMenu(value)' :value='value' :range='arr'>
-			  
-		  </picker> -->
+	
 
 		
 		 <select class="select" @change="changeOneMenu(value)" v-model="value" >
@@ -15,10 +13,11 @@
 		
 		 <select class="select" @change="changeTwoMenu(value1)" v-model="value1">
 			<option value="" disabled selected hidden>选择二级类型</option>
+			<option :value="0">全部</option>
 		    <option :value="v.Id" v-for="(v,i) in arr1" :key="i">{{v.Value}}</option>
 		</select>
 		
-		 <select class="select" @change="changeStatus(value2)" v-model="value2">
+		<select class="select" @change="changeStatus(value2)" v-model="value2">
 			<option value="" disabled selected hidden>选择案件状态</option>
 		    <option :value="v.value" v-for="(v,i) in options" :key="i">{{v.label}}</option>
 		</select>
@@ -28,7 +27,7 @@
 		</select>
 	  </view>
 	   
-	  <view class="content_middle flex col m-100" v-for="(v,i) in caseList" :key="i" @tap="gotoEdit(v.Id,v.Charging_Method)">
+	  <view class="content_middle flex col m-50" v-for="(v,i) in caseList" :key="i" @tap="gotoEdit(v.Id,v.Charging_Method)">
 			<view class="content_middle_view">
 				<view class="content_middle_view_child flex col">
 						<view class="content_middle_view_child_header flex row row_between">
@@ -44,7 +43,7 @@
 				</view>
 			</view>
 	  </view>
-	  
+
 	   
 	 
 	  
@@ -55,7 +54,7 @@
 </template>
 
 <script>
-	
+	import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 	export default {
 		data() {
 			return {
@@ -72,30 +71,82 @@
 					],
 				Sort:1,
 				SortArr:[{value:1,label:'降序'},{value:2,label:'升序'}],
+				 Category_Id:0, 
 			}
 		},
-		onLoad() {
-			var _self = this
-			_self.getMineList()
-			  uni.getSystemInfo({
-        success: (res)=> {
-            this.windowHeight = res.windowHeight;
-        }
-    });    
-    uni.onWindowResize((res) => {
-        if(res.size.windowHeight < this.windowHeight){
-            this.tabbar = false
-        }else{
-            this.tabbar = true
-        }
-    })
-
-			
+			 onPullDownRefresh: function() {
+			 var _self = this
+				//下拉刷新的时候请求一次数据
+			 _self.getMineList() 
+		},
+		onLoad:function(){
+			   
+				// uni.request({
+				// url:_self.$api+"Login/Sel_Login_Status",
+				// data:{sessionId:uni.getStorageSync('sessionId'),User_Id:uni.getStorageSync('userId')},
+				// success:function(res){
+				// 	console.log(res)
+				// 	 if(res.data == 1){ 
+				// 			uni.showToast({
+				// 			    title:'账号异地登陆 强制退出',
+				// 			     duration:2000,
+				// 				 success:function(){
+				// 					 uni.removeStorageSync('userId')
+				// 					 uni.removeStorageSync('sessionId')
+				// 					 uni.removeStorageSync('Rule_Id')
+				// 					 uni.removeStorageSync('Expiration_Date') 
+				// 					 uni.removeStorageSync('Username')
+				// 					 uni.navigateTo({
+				// 					 	url: '../login/login',
+				// 					 });
+				// 					       return false
+				// 				 }
+				// 			});			
+				// 	  }
+				// 	   if(res.data == 3){
+				// 		   	uni.showToast({
+				// 		       title:'登录已过期',
+				// 		        duration:2000,
+				// 				success:function(){
+				// 					uni.removeStorageSync('userId')
+				// 					uni.removeStorageSync('sessionId')
+				// 					uni.removeStorageSync('Rule_Id')
+				// 					uni.removeStorageSync('Expiration_Date') 
+				// 					uni.removeStorageSync('Username')
+				// 					uni.navigateTo({
+				// 						url: '../login/login',
+				// 					});
+				// 					      return false
+				// 				}
+				// 		   });
+				// 		}else{
+				// 			
+				// 			uni.getSystemInfo({
+				// 			        success: (res)=> {
+				// 			            this.windowHeight = res.windowHeight;
+				// 			        }
+				// 			    });    
+				// 			    uni.onWindowResize((res) => {
+				// 			        if(res.size.windowHeight < this.windowHeight){
+				// 			            this.tabbar = false
+				// 			        }else{
+				// 			            this.tabbar = true
+				// 			        }
+				// 			    })
+				// 		}
+				// 	}
+				// })       
 		},
 		onShow(){
 			var _self = this
 			_self.getOneMenu()
+			_self.getMineList()
+		
+			
 		},
+		 components: {//2注册组件
+						uniLoadMore
+					},
 		methods: {
 			getMineList:function(){
 				var _self =this
@@ -111,10 +162,14 @@
 				}else{
 					state1 = _self.value1
 				}
+				console.log(state)
+				console.log(state1)
+				console.log(_self.Sort)
 				uni.request({
-					url:_self.$api1+'Index/Show_All_Case',
+					url:_self.$api+'Index/Show_All_Case',
 					data:{
 						UserId:uni.getStorageSync("userId"),
+						Category_Id:_self.Category_Id,
 						Dic_Id:state1,
 						Status:state,
 						Sort:_self.Sort,	
@@ -122,6 +177,7 @@
 					success:function(res){
 						console.log(res)
 						_self.caseList = res.data.All_Case
+						 uni.stopPullDownRefresh();
 					}
 				})
 				
@@ -129,7 +185,7 @@
 			getOneMenu:function(){
 				var _self= this
 				uni.request({
-					url:_self.$api1+'Index/GetBoxOne',
+					url:_self.$api+'Index/GetBoxOne',
 					data:{},
 					success:function(res){
 						console.log(res)
@@ -140,29 +196,29 @@
 			getTwoMenu:function(id){
 				var _self= this
 				uni.request({
-				url:_self.$api1+'Index/GetBoxTwo',
+				url:_self.$api+'Index/GetBoxTwo',
 				data:{Id:id},
 				success:function(res){
-					console.log(res)
 					_self.arr1 = res.data
-					_self.value1 = res.data[0].Id
+					// _self.value1 = res.data[0].Id
 				},
-				})
+				}) 
 				
 			},
 			changeOneMenu(e){
 				var _self =this
 				console.log(e)
+				this.Category_Id = e
 				if(e===0){
 					_self.value2 = ""
 					_self.value1 = ""
 					_self.value=""
 					_self.arr1 = []
-					_self.getMineList()
 				}else{
 					_self.value = e
 					_self.getTwoMenu(e)
 				}
+				_self.getMineList()
 			},
 			changeTwoMenu(e){
 				this.value1 = e
@@ -182,7 +238,6 @@
 				})
 			},
 			gotoEdit(id,type){
-					// console.log(id+++"/"+type)
 					uni.navigateTo({
 						url:'../../pages/caseEdit/caseEdit?Id='+id+'&Charging_Method='+type
 					})
@@ -202,9 +257,6 @@
 </script>
 
 <style lang="scss">
-	// .content{
-	// 	position: relative;
-	// }
 .add_btn{
 	position: fixed;
 	bottom: 125upx;
@@ -230,8 +282,13 @@
 	width: 23%;
 //	-webkit-appearance: none;/*兼容苹果手机*/
 }
+.content_middle{
+	margin-bottom: 50upx;
+	z-index: 999;
+}
 .content_middle_view{
-	margin-bottom: 100upx;
+	// margin-bottom: 100upx;
+	border-radius: 10upx;
 	width: 100%;
 	height: 350upx;
 	box-shadow:0 3px 15px 0 rgba(0,0,0,.3);
@@ -244,6 +301,7 @@
 				font-weight: 600;
 					font-size: 36upx;
 				border-bottom: 1px solid #DDDDDD;
+				margin-top: 10upx;
 				.title{
 				
 				}

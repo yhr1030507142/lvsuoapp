@@ -1,12 +1,17 @@
 <template>
 	<view class="content">
 		<view class="header flex row">
-			<image :src="'http://java.gzbigbang.cn'+pic" mode="" class="pic" @tap="changeImg"></image>
+			<image :src="'http://113.108.197.50:8081'+pic" mode="" class="pic" @tap="changeImg"></image>
 			<view class="info flex col">
 				<view class="name flex row row_between">
-					<text class="name_word">律师:</text>
-					<input type="text" class="name_word_input" v-model="name" disabled="disabled">
+					<text class="name_word"></text>
 					<view class="edit" @tap="addMineInfo">保存</view>
+				</view>
+				
+				<view class="name flex row row_between">
+					<text class="name_word1">律师:</text>
+					<input type="text" class="name_word_input" v-model="name" disabled="disabled">
+					
 				</view>
 				<view class="name flex row row_between">
 					<text class="name_word1">执业证号:</text>
@@ -342,6 +347,7 @@
 					border: 1upx solid #999;
 					flex: 1;
 					padding-left: 20upx;
+					height: 54upx;
 				}
 
 				.name_word {
@@ -353,7 +359,7 @@
 					font-size: 32upx;
 					display: flex;
 					min-width: 140upx;
-					text-align: justify;
+					text-align: right;
 				}
 
 				.edit {
@@ -381,7 +387,7 @@
 			margin-top: 30upx;
 			display: flex;
 			flex-direction: column;
-
+	padding-bottom: 50px; 
 			.middle_info_head {
 				font-size: 42upx;
 				font-weight: 600;

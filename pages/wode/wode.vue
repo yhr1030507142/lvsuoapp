@@ -2,7 +2,7 @@
 	<view class="content">
 			<view class="header flex row">
 				<image src="" mode="" class="pic" v-if="pic == undefined"></image>
-				<image :src="'http://java.gzbigbang.cn'+pic" mode=""   :class="pic_class" v-else  @tap="showPic()"></image>
+				<image :src="'http://113.108.197.50:8081'+pic" mode=""   :class="pic_class" v-else  @tap="showPic()"></image>
 				<view class="info flex col">
 						<view class="name flex row row_between">
 							<text class="name_word">律师:<text class="name_word">{{name}}</text> </text>
@@ -74,16 +74,16 @@
 		data() {
 			return {
 				 nodes: [{
-										name: 'div',
-										attrs: {
-											class: 'div-class',
-											style: 'line-height: 60px; color: red; text-align:center;'
-										},
-										children: [{
-											type: 'text',
-											text: 'Hello&nbsp;uni-app!'
-										}]
-										}],
+				name: 'div',
+				attrs: {
+					class: 'div-class',
+					style: 'line-height: 60px; color: red; text-align:center;'
+				},
+				children: [{
+					type: 'text',
+					text: 'Hello&nbsp;uni-app!'
+				}]
+				}],
 				  name:'',
 				  number:'',
 				  job:'',
@@ -105,7 +105,53 @@
 				  
 			}
 		},
-		onLoad(){
+		onLoad:function(){
+			
+		},
+		onShow(){
+			var _self = this
+					uni.request({
+			url:_self.$api+"Login/Sel_Login_Status",
+			data:{sessionId:uni.getStorageSync('sessionId'),User_Id:uni.getStorageSync('userId')},
+			success:function(res){
+				console.log(res)
+				 if(res.data == 1){
+						uni.showToast({
+						    title:'账号异地登陆 强制退出',
+						     duration:2000,
+							 success:function(){
+								 		 uni.removeStorageSync('userId')
+								 uni.removeStorageSync('sessionId')
+								 uni.removeStorageSync('Rule_Id')
+								 uni.removeStorageSync('Expiration_Date') 
+								 uni.removeStorageSync('Username')
+								 uni.navigateTo({
+								 	url: '../login/login',
+								 });
+								       return false
+							 }
+						});
+					
+				  }
+				   if(res.data == 3){
+					   	uni.showToast({
+					       title:'登录已过期',
+					        duration:2000,
+							success:function(){
+								uni.removeStorageSync('userId')
+								uni.removeStorageSync('sessionId')
+								uni.removeStorageSync('Rule_Id')
+								uni.removeStorageSync('Expiration_Date') 
+								uni.removeStorageSync('Username')
+								uni.navigateTo({
+									url: '../login/login',
+								});
+								      return false
+							}
+					   });
+					}
+				}
+			})     
 			this.showInfo()
 			this.getJobList()
 		},
@@ -116,15 +162,22 @@
 					url:_self.$api+"Personal/Display_Information",
 					data:{User_Id:uni.getStorageSync("userId")},
 					success:function(res){
-					
+					console.log(res)
+					    _self.Id = res.data.Id
+						_self.name = res.data.Staff_Name
+						_self.User_Id = res.data.User_Id
+				
+				
 				_self.jobTextare = res.data.practice_Areas
-				_self.name = res.data.Staff_Name
-                _self.Id = res.data.Id
-				_self.User_Id = res.data.User_Id
                 _self.honor = res.data.Honor
                 _self.pic = res.data.Avatar_Path
                 _self.tel = res.data.Contact_Information
-                _self.value = res.data.Position_Id
+				if(res.data.Position_Id == undefined){
+					 _self.value = undefined
+				}else{
+					 _self.value = res.data.Position_Id
+				}
+                
                 _self.number = res.data.Occupation_Number
                 _self.teach = res.data.Education
                 _self.email = res.data.Contact_Mailbox
@@ -156,10 +209,12 @@
 				  uni.request({
 				  	url:_self.$api+"Personal/Position",
 					success:function(res){
-						  if(res.data[_self.value].Position_Name == undefined || res.data[_self.value].Position_Name == ''){
+						console.log(res)
+						console.log(_self.value)
+						  if(res.data[_self.value].Position_Name == undefined || res.data[_self.value].Position_Name == '' || _self.value == undefined || _self.value==''){
 						    _self.job = ''
 						}else{
-						    _self.job =  _self.job = res.data[_self.value].Position_Name
+						     _self.job = res.data[_self.value].Position_Name
 						}
 					}
 				  })
@@ -230,6 +285,7 @@
 			margin-top: 30upx;
 			display: flex;
 			flex-direction: column;
+		
 		.middle_info_head{
 			font-size: 42upx;
 			font-weight: 600;

@@ -6,6 +6,9 @@
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
+        "softinput" : {
+            "mode" : "adjustPan"
+        },
         /* 5+App特有相关 */
         "usingComponents" : true,
         "splashscreen" : {
@@ -63,6 +66,13 @@
     },
     "h5" : {
         "title" : "律所app",
-        "domain" : ""
+        "domain" : "lsmsqd.gzbigbang.net",
+        "router" : {
+            "mode" : "history"
+        },
+        "devServer" : {
+            "port" : "",
+            "disableHostCheck" : true
+        }
     }
 }

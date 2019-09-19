@@ -7,11 +7,9 @@
 			</view>
 		</view>
 		<view class="middle">
-			 <ul>
-
-					
-				<li v-for="(v,i) in arr" :key="i">
-					<image src="../../static/img/zj5.jpg" mode="" class="pic_img"></image>
+			 <ul>	
+				<li v-for="(v,i) in arr" :key="i" @tap='lookDetails(v.Id)'>
+					<image src="../../static/img/ls.jpg" mode="" class="pic_img"></image>
 					<view>{{v.Customer_Name_Zh}}</view>
 				</li>
 				<uni-load-more  :loadingType="loadingType" :contentText="contentText" ></uni-load-more>
@@ -50,9 +48,8 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 				total:0,
 			}  
 		},
-		onLoad() {
-			var _self = this
-			_self.getmorenews() 
+		onLoad:function() {
+		 
 		},
 		 onPullDownRefresh: function() {
 			 var _self = this
@@ -62,7 +59,6 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 		 onReachBottom: function() {
 			//触底的时候请求数据，即为上拉加载更多
 			//为了更加清楚的看到效果，添加了定时器
-			
 			var _self =this
 			page++
 			if (timer != null) {
@@ -73,11 +69,11 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 			_self.loadingType = 1;
 			uni.showNavigationBarLoading();//显示加载动画
 			uni.request({
-					url:'http://java.gzbigbang.cn/lsmsManager/Customer/Show_My_Customers',
+					url:_self.$api+'Customer/Show_My_Customers',
 					method:"GET",
 					data:{
 					User_Id:uni.getStorageSync("userId"),
-					Customer_Name:"",
+					Customer_Name:_self.searchInput,
 					Display_Page_Number:_self.pageNum,
 					PageNumber:page
 					},
@@ -94,19 +90,59 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 					}
 					console.log(_self.arr)
 					_self.loadingType = 0;//将loadingType归0重置
-					uni.hideNavigationBarLoading();//关闭加载动画
-					
+					uni.hideNavigationBarLoading();//关闭加载动画	
 				}
 			});
-
-			}, 1000);
-				
-				// 正常应为:
-				
+			}, 1000);		
+				// 正常应为:		
     },
 
 		onShow(){
-		
+		var _self = this
+		uni.request({
+		url:_self.$api+"Login/Sel_Login_Status",
+		data:{sessionId:uni.getStorageSync('sessionId'),User_Id:uni.getStorageSync('userId')},
+		success:function(res){
+			console.log(res)
+			 if(res.data == 1){
+					uni.showToast({
+					    title:'账号异地登陆 强制退出',
+					     duration:2000,
+						 success:function(){
+							  uni.removeStorageSync('userId')
+							 uni.removeStorageSync('sessionId')
+							 uni.removeStorageSync('Rule_Id')
+							 uni.removeStorageSync('Expiration_Date') 
+							 uni.removeStorageSync('Username')
+							 uni.navigateTo({
+							 	url: '../login/login',
+							 });
+							       return false
+						 }
+					});
+			  }
+			   if(res.data == 3){
+				   	uni.showToast({
+				       title:'登录已过期',
+				        duration:2000,
+						success:function(){
+							uni.removeStorageSync('userId')
+							uni.removeStorageSync('sessionId')
+							uni.removeStorageSync('Rule_Id')
+							uni.removeStorageSync('Expiration_Date') 
+							uni.removeStorageSync('Username')
+							uni.navigateTo({
+								url: '../login/login',
+							});
+							      return false
+						}
+				   });
+				}
+				else{
+					_self.getmorenews()
+				}
+			}
+		})    
 		},
 		methods: {
 			change(e){
@@ -116,13 +152,13 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 				page = 1
 				this.getmorenews()
 			},
-			getmorenews(){
+			getmorenews:function(){
 				console.log(uni.getStorage("userId"))
 				var _self =this
 				_self.loadingType = 1;
 				uni.showNavigationBarLoading();//显示加载动画
 				uni.request({
-				url:'http://java.gzbigbang.cn/lsmsManager/Customer/Show_My_Customers',
+				url:_self.$api+'Customer/Show_My_Customers',
 				data:{
 					User_Id:uni.getStorageSync("userId"),
 					Customer_Name:_self.searchInput,
@@ -130,11 +166,15 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 					PageNumber:page,
 				},
 				success: function(res) {
+					uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+					console.log(res)
 					console.log(res.data.PageCount)
-						if(res.data.Customers.length ===0 || res.data.PageCount===0){
+						if(res.data.Customers == undefined || res.data.PageCount == 0){
+							console.log('11111111')
 							_self.arr = []
 							uni.hideNavigationBarLoading();
 							uni.stopPullDownRefresh();//得到数据后停止下拉刷新
+							
 						}else{
 							if(res.data.PageCount>=_self.pageNum){
 								 let newsList =[];
@@ -185,6 +225,11 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 			});
 
 			},
+			lookDetails:function(id){
+				uni.navigateTo({
+					url:'../kehuDetails/kehuDetails?id='+id
+				})
+			}
 		},
 		watch:{
 			
