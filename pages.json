@@ -106,15 +106,17 @@
         ,{
             "path" : "pages/loginUser/loginUser",
             "style" : {
-				"navigationBarTitleText": "账号登录"
-				// "app-plus":{
-				// 		"titleNView":false
-				// 			}
+				"navigationBarTitleText": "账号登录",
+				"app-plus":{
+						"titleNView":false
+							}
 			}
         }
         ,{
             "path" : "pages/contract/contract",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "合同"
+			}
         }
         ,{
             "path" : "pages/tongji/tongji",
@@ -137,7 +139,7 @@
 				"navigationBarTitleText": "合同末班",
 				"app-plus":{
 						"titleNView":false
-							}
+					}
 			}
         }
         ,{
@@ -156,16 +158,18 @@
         ,{
             "path" : "pages/kehuDetails/kehuDetails",
             "style" : {
-				"app-plus": {
-				"titleNView": false ,//禁用原生导航栏
-				"bounce":"none"
-				}
+				"navigationBarTitleText": "客户详情"
+				
+				// "app-plus": {
+				// "titleNView": false ,//禁用原生导航栏
+				// "bounce":"none"
+				// }
 			} 
         }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "律所",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},

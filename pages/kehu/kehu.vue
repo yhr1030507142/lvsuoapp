@@ -9,7 +9,7 @@
 		<view class="middle">
 			 <ul>	
 				<li v-for="(v,i) in arr" :key="i" @tap='lookDetails(v.Id)'>
-					<image src="../../static/img/ls.jpg" mode="" class="pic_img"></image>
+					<image src="../../static/img/123.png" mode="" class="pic_img"></image>
 					<view>{{v.Customer_Name_Zh}}</view>
 				</li>
 				<uni-load-more  :loadingType="loadingType" :contentText="contentText" ></uni-load-more>
@@ -38,12 +38,12 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 			searchInput:'',
 			 loadingText: '加载中...',
 			 loadingType: 0,//定义加载方式 0---contentdown  1---contentrefresh 2---contentnomore
-        contentText: {
+			contentText: {
             contentdown:'上拉显示更多',
             contentrefresh: '正在加载...',
             contentnomore: '没有更多数据了'
 				},
-				pageNum:7,
+				pageNum:8,
 				page:1,
 				total:0,
 			}  
@@ -59,13 +59,14 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 		 onReachBottom: function() {
 			//触底的时候请求数据，即为上拉加载更多
 			//为了更加清楚的看到效果，添加了定时器
+			console.log('5555555555')
 			var _self =this
-			page++
+			_self.page++
 			if (timer != null) {
 					clearTimeout(timer);
 				}
 			timer = setTimeout(function() {
-				console.log(_self.loadingType)
+			console.log(_self.loadingType)
 			_self.loadingType = 1;
 			uni.showNavigationBarLoading();//显示加载动画
 			uni.request({
@@ -75,10 +76,11 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 					User_Id:uni.getStorageSync("userId"),
 					Customer_Name:_self.searchInput,
 					Display_Page_Number:_self.pageNum,
-					PageNumber:page
+					PageNumber:_self.page
 					},
 				success: function(res) {
-					console.log(res.data.Customers)
+					
+					console.log(res.data)
 					if (_self.arr.length==res.data.PageCount) {//没有数据
 						_self.loadingType = 2;
 						uni.hideNavigationBarLoading();//关闭加载动画
@@ -139,6 +141,8 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 				   });
 				}
 				else{
+					_self.page = 1
+					_self.arr = []
 					_self.getmorenews()
 				}
 			}
@@ -149,10 +153,12 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 				console.log(e)
 			},
 			search(){
-				page = 1
+				var _self = this
+				_self.page = 1
 				this.getmorenews()
 			},
 			getmorenews:function(){
+				console.log('sjow')
 				console.log(uni.getStorage("userId"))
 				var _self =this
 				_self.loadingType = 1;
@@ -163,37 +169,24 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 					User_Id:uni.getStorageSync("userId"),
 					Customer_Name:_self.searchInput,
 					Display_Page_Number:_self.pageNum,
-					PageNumber:page,
+					PageNumber:_self.page,
 				},
 				success: function(res) {
 					uni.stopPullDownRefresh();//得到数据后停止下拉刷新
 					console.log(res)
 					console.log(res.data.PageCount)
 						if(res.data.Customers == undefined || res.data.PageCount == 0){
-							console.log('11111111')
 							_self.arr = []
 							uni.hideNavigationBarLoading();
 							uni.stopPullDownRefresh();//得到数据后停止下拉刷新
-							
 						}else{
-							if(res.data.PageCount>=_self.pageNum){
+							if(res.data.PageCount >= _self.pageNum){
 								 let newsList =[];
 								for(var i=0;i<_self.pageNum;i++){
 									newsList.push(res.data.Customers[i]);
 								}
-								_self.arr = newsList;
-								if(res.data.PageCount==res.data.Customers.length){
-									uni.showToast({
-										title: '已是最新',
-										duration: 2000
-									});
-								}
-							}else{
-								 let newsList =[];
-								for(var i=0;i<res.data.PageCount;i++){
-									newsList.push(res.data.Customers[i]);
-								}
-								_self.arr = newsList;
+								console.log(newsList)
+								_self.arr =  newsList;
 								if(res.data.PageCount==res.data.Customers.length){
 									uni.showToast({
 										title: '已是最新',
@@ -206,8 +199,6 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 					   
 					uni.hideNavigationBarLoading();
                     uni.stopPullDownRefresh();//得到数据后停止下拉刷新
-
-
 					// if (_self.arr.length==res.data.PageCount) {//没有数据
 					// 	_self.loadingType = 2;
 					// 	uni.hideNavigationBarLoading();//关闭加载动画
@@ -223,7 +214,6 @@ import uniLoadMore from "../../components/uni-load-more/uni-load-more.vue";
 					
 				}
 			});
-
 			},
 			lookDetails:function(id){
 				uni.navigateTo({

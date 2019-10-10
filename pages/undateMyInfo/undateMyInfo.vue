@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="header flex row">
-			<image :src="'http://113.108.197.50:8081'+pic" mode="" class="pic" @tap="changeImg"></image>
+			<image :src="$api1+pic" mode="" class="pic" @tap="changeImg"></image>
 			<view class="info flex col">
 				<view class="name flex row row_between">
 					<text class="name_word"></text>
@@ -206,7 +206,7 @@
 								'user': 'test'
 							},
 							success: function(uploadFileRes) {
-								console.log(uploadFileRes)
+									console.log(uploadFileRes)
 									_self.File_Name = JSON.parse(uploadFileRes.data).File_Name
 									_self.Suffix_Name =JSON.parse(uploadFileRes.data).Suffix_Name
 									_self.fileName = JSON.parse(uploadFileRes.data).fileName

@@ -12,10 +12,11 @@ Vue.prototype.$store = store;
 Vue.use(VueQuillEditor) 
 Vue.prototype.$echarts = echarts 
 Vue.config.productionTip = false 
-//Vue.prototype.$api = 'http://lsms.gzbigbang.net/lsmsManager/'
-Vue.prototype.$api = 'http://192.168.0.110:8080/' 
+Vue.prototype.$api = 'http://lsms.gzbigbang.net/lsmsManager/'
+Vue.prototype.$api1 = 'http://lsms.gzbigbang.net'
+//Vue.prototype.$api = 'http://192.168.0.104:8080/'  
 //Vue.prototype.$api="http://java.gzbigbang.cn/lsmsApp/" 
-App.mpType = 'app'  
+App.mpType = 'app'   
 const app = new Vue({ 
     ...App 
 })  

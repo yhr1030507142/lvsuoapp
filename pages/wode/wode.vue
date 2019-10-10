@@ -2,7 +2,7 @@
 	<view class="content">
 			<view class="header flex row">
 				<image src="" mode="" class="pic" v-if="pic == undefined"></image>
-				<image :src="'http://113.108.197.50:8081'+pic" mode=""   :class="pic_class" v-else  @tap="showPic()"></image>
+				<image :src="$api1+pic" mode=""   :class="pic_class" v-else  @tap="showPic()"></image>
 				<view class="info flex col">
 						<view class="name flex row row_between">
 							<text class="name_word">律师:<text class="name_word">{{name}}</text> </text>
@@ -163,11 +163,9 @@
 					data:{User_Id:uni.getStorageSync("userId")},
 					success:function(res){
 					console.log(res)
-					    _self.Id = res.data.Id
-						_self.name = res.data.Staff_Name
-						_self.User_Id = res.data.User_Id
-				
-				
+				_self.Id = res.data.Id
+				_self.name = res.data.Staff_Name
+				_self.User_Id = res.data.User_Id
 				_self.jobTextare = res.data.practice_Areas
                 _self.honor = res.data.Honor
                 _self.pic = res.data.Avatar_Path
@@ -177,7 +175,6 @@
 				}else{
 					 _self.value = res.data.Position_Id
 				}
-                
                 _self.number = res.data.Occupation_Number
                 _self.teach = res.data.Education
                 _self.email = res.data.Contact_Mailbox
@@ -211,10 +208,15 @@
 					success:function(res){
 						console.log(res)
 						console.log(_self.value)
-						  if(res.data[_self.value].Position_Name == undefined || res.data[_self.value].Position_Name == '' || _self.value == undefined || _self.value==''){
+						var arr = []
+						for(var i =0;i<res.data.length;i++){
+								arr[i] = res.data[i].Id
+						}
+						console.log(arr.indexOf(_self.value))
+						  if(res.data[arr.indexOf(_self.value)].Position_Name == undefined || res.data[arr.indexOf(_self.value)].Position_Name == '' || _self.value == undefined || _self.value==''){
 						    _self.job = ''
 						}else{
-						     _self.job = res.data[_self.value].Position_Name
+						      _self.job = res.data[arr.indexOf(_self.value)].Position_Name
 						}
 					}
 				  })

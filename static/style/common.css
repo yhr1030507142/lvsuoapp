@@ -87,6 +87,7 @@ td,th{padding:0}
 .content{
 	width: 90%;
 	margin: 0 auto;
+	height: 100%;
 }
 .flex{
 	display: flex;

@@ -12,40 +12,37 @@
 						<view class="content_middle_view_child_header flex row">
 								<text class="state">客户基本信息</text>
 						</view>
-						<view class="content_middle_view_child_bottom flex row row_between">
-							<view class="select1">
-									{{case_type}}
-							</view> 
+						<view class="content_middle_view_child_bottom flex col"> 
+							<!-- <view class="select1">
+								<p class="info_p">案件类型</p><view class="name1">{{case_type}}</view>
+							</view> --> 
 							<view class="select">
-									{{Customer_Type}}
+								<p class="info_p">客户类型</p><view class="name1">{{Customer_Type}}</view>
 							</view>
 							<view class="select">
-								{{industry}}
+								<p class="info_p">行业类型</p><view class="name1">{{industry}}</view> 
 							</view>
-							
-							
-							
-							
+
 						</view>
 						
 						<view class="content_middle_view_child_bottom_info flex col">
-							<div class="info flex row">
+							<div class="select flex row">
 									<p class="info_p">客户名称</p>
-									 <view class="name">{{Customer_Name_Zh}}</view>
+									 <view class="name1">{{Customer_Name_Zh}}</view>
 							</div>
-								<div class="info flex row">
+								<div class="select flex row">
 										<p class="info_p">证件</p>
-										 <view class="name">{{Customer_Number}}</view>
+										 <view class="name1">{{Customer_Number}}</view>
 								</div>
 								
-								<div class="info flex row">
+								<div class="select flex row">
 										<p class="info_p">地址</p>
-										 <view class="name">{{City}}{{Detailed_Address}}</view>
+										 <view class="name1">{{City}}{{Detailed_Address}}</view>
 								</div>
 								
-								<div class="info flex row">
+								<div class="select flex row">
 										<p class="info_p">电话</p>
-										<view class="name">{{Contact_Party}}</view>
+										<view class="name1">{{Contact_Party}}</view>
 								</div>
 						</view>	
 							
@@ -60,17 +57,17 @@
 	 						<view class="content_middle_view_child_header flex row">
 	 								<text class="state">案件基本信息</text>
 	 						</view>
-	 						<view class="content_middle_view_child_bottom flex row row_between">
-	 							 	<view class="select">
-	 							 	{{case_type}}
-	 							 </view>	
-	 						</view>
+
 	 						
 	 						<view class="content_middle_view_child_bottom_info flex col">
+								<view class="info flex row">
+																	<p class="info_p">案件类型</p>
+																	<view class="name">{{case_type}}</view>
+								</view>	
 	 								<div class="info flex row">
 	 										<p class="info_p">案件名称</p>
 	 										<view class="name">{{Case_Name}}	
-												</view>
+											</view>
 	 								</div>
 	 								
 	 								<div class="info flex row">
@@ -300,7 +297,67 @@
 				</view>
 			</view>
 	<!--  -->
-
+	<!--  -->
+	<view class="content_middle_view">
+			<view class="content_middle_view_child flex col" style="padding-bottom: 0;">
+				
+					<view class="content_middle_view_child_header flex row">
+						<view class="shoufeifangshi">
+								<p class="shoufeifangshi_p">上传图片或视频</p>
+						<!-- 	<select name="" id="" class="shoufeifangshi_select" v-model="fileType">
+								<option :value="v.Id" v-for="(v,i) in fileTypeArr" :key="i">{{v.value}}</option>
+							</select> -->
+							
+						</view>
+						 
+						
+					</view>
+					 <view class="flex row">
+						 <view class="shangchuan_btn"  @click="picUpload()">上传图片</view>
+						 <!-- <view class="shangchuan_btn"  @click="audioUpload()" style="margin-left: 20upx;">上传视频</view> -->
+						 <view class="shangchuan_btn"  @click="saveUpload()" style="margin-left: 20upx;">保存</view>
+					 </view>
+					 <view class="">
+						 <view v-show="File_Name != ''">{{File_Name}}</view>
+					 	<!-- <image   :src="up_image" mode="" style="width: 100%;height:400upx;" v-show="up_image != ''"></image>
+					 	<video  :src="up_video" style="width: 100%;height:400upx;" v-show="up_video != ''"></video> -->
+					 </view>
+					
+			</view>
+		</view>
+	<!--  -->
+<!--  -->
+	<view class="content_middle_view">
+			<view class="content_middle_view_child flex col" style="padding-bottom: 0;">
+					<view class="content_middle_view_child_header flex row">
+						<view class="shoufeifangshi flex row_between">
+								<p class="shoufeifangshi_p">录音(60s语音)</p>
+								<!-- <text @tap="addLuyin" class="addLayer">添加录音</text> -->
+						</view>
+					</view>
+					<view v-for="(v,i) in localIdList" :key='i' style="margin-top: 30upx;">
+					<view class="flex row" style="flex-wrap: wrap;">
+						<view class="shangchuan_btn"  @click="luyin(0)">开始录音</view>
+						<view class="shangchuan_btn"  @tap="stopRe(0)" style="margin-left: 20upx;">停止录音</view>
+						<view class="shangchuan_btn"  @tap="upVoice(0)" style="margin-left: 20upx;">上传录音</view>
+						
+					</view>
+					<view class="flex row" style="flex-wrap: wrap;margin-top: 20upx;">
+						<view class="shangchuan_btn"  @tap="play(0)" style="">播放录音</view>
+					<view class="shangchuan_btn"  @tap="stopPlay(0)" style="margin-left: 20upx;">停止播放</view>
+					</view>
+					<view>录音时间{{v.time}}</view>
+					<view>刚录完的语音:{{v.word}}</view> 
+					<view class="list flex row_between" style="align-items: center;">
+					    <audio ref="player" :src="v.src"  controls></audio>
+						<view class="jian img" @tap="deleteLuyin(0)" v-show="i != 0">
+							<image src="../../static/img/jian.png" mode="" class="img_100"></image>
+						</view>
+					</view>
+					</view>
+			</view>
+		</view>
+	<!--  -->	
 		
 	</view>
 	<view class="btn_box flex row row_center">
@@ -311,11 +368,37 @@
 </template>
 
 <script>
-	
+	import wx from 'weixin-js-sdk'
+	const _this = wx
 	export default {
 		data() {
 			return {
-
+//录音
+				localId: '',
+				serverId: '',
+				downLoadId: '',
+				Soff: true,
+				time: 0,
+				timer: null,
+				word:'无',
+				localIdList:[
+					{localId: '',
+					serverId: '',
+					downLoadId: '',
+					Soff: true,
+					time: 0,
+					timer: null,
+					word:'无',
+					src:'',
+					File_Name: "",
+					Suffix_Name: "",
+					fileName: "",
+					size: 68}
+				],
+				fileName:'',
+				size:'',
+				File_Name:'',
+				Suffix_Name:'',
 				case_type:'',
 				Customer_Type:'',
 				Customer_Name_Zh:'',
@@ -350,7 +433,9 @@
 		// "Status": 0,
   //       "Two_Type_Id": 82,
   //       "One_Type_Id": 4,
-
+					 up_image:'',
+					 up_video:'',
+					 picImage:'',
       
 				
 			}
@@ -362,10 +447,306 @@
 			 this.getInfo()
 		},
 		onShow(){
+			var _self = this
+			if(uni.getStorageSync('isAndroid')==1){
+				_self.configPage()
+			}else if(uni.getStorageSync('isAndroid')==2){
+				uni.setStorageSync('isAndroid',1)
+				location.reload() 
+				_self.configPage()
+				
+			}
 			
 		},
 		methods: {
-			
+			//图片上传
+			picUpload:function(){
+				var _self = this
+				uni.chooseImage({
+				success: function (chooseImageRes) {
+					console.log(chooseImageRes)
+					const tempFilePaths = chooseImageRes.tempFilePaths;
+					console.log(tempFilePaths)
+					uni.uploadFile({
+						url: _self.$api+'Base/uploadRawFile', //仅为示例，非真实的接口地址
+						filePath: tempFilePaths[0],
+						name: 'file',
+						formData: { 
+							'user': 'test'
+						},
+						success: function (uploadFileRes) {
+							_self.up_image = uploadFileRes.data
+							 console.log(JSON.parse(uploadFileRes.data))
+							// console.log(uploadFileRes.data); 
+							_self.fileName = JSON.parse(uploadFileRes.data).fileName
+							_self.size = JSON.parse(uploadFileRes.data).size
+							_self.File_Name = JSON.parse(uploadFileRes.data).File_Name
+							_self.Suffix_Name = JSON.parse(uploadFileRes.data).Suffix_Name
+						}
+					})
+					}
+					}) 
+			},
+		configPage:function(){
+				  var _self = this
+				  //alert(location.href)
+				  console.log(location.href.split('#')[0])
+				   var data = {url:location.href.split('#')[0],AppId:'wxc9722e78824af65f',AppSecret:'2521b18d19e16fc99408992572338251'}
+			//var data = {url:location.href.split('#')[0],AppId:'wx4c958b0745e83859',AppSecret:'1ee1c1f93c8d2889403105d88f7f1c90'}
+				
+				  console.log(data) 
+				  uni.request({
+				  		url:_self.$api+"Wechar/Sound",
+				  		data:data,
+				  		success:function(res){
+				  		console.log(res)
+				  		 _this.config({
+				  		  debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				  		  appId: 'wxc9722e78824af65f', // 必填，公众号的唯一标识
+				  		  timestamp:res.data.timestamp, // 必填，生成签名的时间戳
+				  		  nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
+				  		  signature:res.data.signature, // 必填，签名
+				  		  jsApiList: ['startRecord','stopRecord', 'playVoice', 'pauseVoice','translateVoice', 'stopVoice', 'uploadVoice', 'downloadVoice'] ,// 必填，需要使用的JS接口列表
+				  		  // 接口 开始录音接口 停止录音接口 播放语音接口 暂停播放接口 停止播放接口 上传语音接口 下载语音接口 识别音频并返回识别结果接口
+				  		}) 
+				  		// config信息验证后才执行 
+						_this.ready(() => { 
+				  		// 	wx.checkJsApi({
+				  		//     jsApiList: ['startRecord','stopRecord', 'playVoice', 'pauseVoice','translateVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'downloadVoice'] ,// 必填，需要使用的JS接口列表
+				  		//     success: function(res) {
+				  		// 
+				  		//     }
+				  		// });
+				  		})
+				  		// 微信sdk错误返回问题
+				  		_this.error((res) => {
+				  		 //alert('出错了：' + res.errMsg)// 这个地方的好处就是wx.config配置错误，会弹出窗口哪里错误，然后根据微信文档查询即可。
+				  		// window.location.href = location.href.split('#')[0]
+				  		})
+				  		}
+				  	})
+		},
+		/**
+		 * 添加录音
+		 */
+		addLuyin:function(){
+			var _self = this
+			_self.localIdList.push({
+				localId: '',
+				serverId: '',
+				downLoadId: '',
+				Soff: true,
+				time: 0,
+				timer: null,
+				word:'无',
+				src:'',
+			})
+		},
+		/**
+		 * @param {Object} i
+		 * 删除录音
+		 */
+		deleteLuyin:function(i){
+			var _self = this
+			_self.localIdList.splice(i,1)
+		},
+		/**
+		 * 开始录音
+		 */
+		luyin:function(i){
+			// alert('123456')
+			let that = this
+			that.localIdList[i].time = 0
+			_this.startRecord({
+			  success: function () {
+				  uni.showToast({
+				  	title:'成功调起录音',
+					icon:'success'
+				  })
+			    that.localIdList[i].timer = setInterval(() => {
+			      that.localIdList[i].time++ 
+			    }, 1000)
+			    that.vicoeEnd(i)
+			  },
+			  cancel: function () {
+			    alert('用户拒绝授权录音')
+			  }
+			})
+		},
+		/**
+		 * 结束录音
+		 */
+		// 停止录音
+		stopRe:function(i) {
+		  let that = this
+		  // clearInterval(that.timer)
+		  _this.stopRecord({
+		    success: function (res) {
+		      // alert('暂停成功')
+			  uni.showToast({
+			  	title:'录音停止成功',
+			  	icon:'success'
+			  })
+		      console.log(res)
+		      clearInterval(that.localIdList[i].timer)
+		      that.localIdList[i].localId = res.localId
+		     // that.upVoice()
+		    },
+		    fail: function (error) {
+		      alert('录音停止异常')
+		      console.log(error)
+		    }
+		  })
+		},
+		// 60秒监听
+		vicoeEnd:function(i) {
+		  let that = this
+		  _this.onVoiceRecordEnd({
+		    // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+		    complete: function (res) {
+
+			  uni.showToast({
+			  	title:'60秒停止录音',
+			  	icon:'success'
+			  })
+		      that.localIdList[i].localId = res.localId
+		      clearInterval(that.localIdList[i].timer)
+		      that.upVoice(i)
+		    }
+		  })
+		},
+		// // 播放
+		play:function (i) {
+		  let that = this
+		  console.log(that.localIdList[i].localId)
+		  _this.playVoice({
+		    localId: that.localIdList[i].localId // 需要播放的音频的本地ID，由stopRecord接口获得
+		  })
+		},
+		// 停止
+		stopPlay:function (i) {
+		  let that = this
+		  _this.stopVoice({
+		    localId: that.localIdList[i].localId // 需要停止的音频的本地ID，由stopRecord接口获得
+		  })
+		},
+		// 上传语音
+		upVoice:function(i) {
+		  let that = this
+		  _this.uploadVoice({
+		    localId: that.localIdList[i].localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+		    isShowProgressTips: 1, // 默认为1，显示进度提示
+		    success: function (res) {
+		      var apiUrl = window.location.href
+		      that.localIdList[i].serverId = res.serverId // 返回音频的服务器端ID
+						uni.request({
+								url: that.$api+'Base/GetInputStream',
+							    method: 'get',
+								headers: {'Content-Type': 'application/json'},
+								data: {
+									mediaId: res.serverId,
+									AppId:'wxc9722e78824af65f', 
+									AppSecret:'2521b18d19e16fc99408992572338251'
+							}
+						}).then((data) => {
+				  console.log(data)
+		          console.log(that.$api+'LSMSFolde'+data[1].data.fileName)
+		          that.localIdList[0].src = that.$api+'LSMSFolde'+data[1].data.fileName
+				  that.localIdList[0].File_Name = data[1].data.File_Name
+				  that.localIdList[0].Suffix_Name = data[1].data.Suffix_Name
+				  that.localIdList[0].fileName = data[1].data.fileName
+				  that.localIdList[0].size = data[1].data.size
+				  that.saveLuyin()
+				   alert('上传成功')
+		        }).catch((error) => {
+		          console.log(error)
+		        })
+		    }
+		  })
+		},
+		/**
+		 * s视频上传
+		 */
+		audioUpload:function(){
+			var _self = this
+			uni.chooseVideo({
+			    count: 1,
+			    sourceType: ['camera', 'album'],
+			    success: function (res) {
+					const tempFilePaths = res.tempFilePath;
+					console.log(tempFilePaths)
+					uni.uploadFile({
+						url: _self.$api+'Base/uploadRawFile', //仅为示例，非真实的接口地址
+						filePath: tempFilePaths[0],
+						name: 'file',
+						formData: {
+							'user': 'test'
+						},
+						success: function (uploadFileRes) {
+							console.log(uploadFileRes)
+							console.log(uploadFileRes.data); 
+						
+						}
+					})	
+			    }
+			 });
+		},	
+		//保存图片
+		saveUpload:function(){
+			var _self = this
+			uni.request({
+				url:_self.$api+'Document/Add_Document',
+				data:{
+					Case_Id:_self.Cause_Id,
+					File_Name:_self.File_Name,
+					fileName:_self.fileName,
+					size:_self.size,
+					Suffix_Name:_self.Suffix_Name,
+					Customer_contract:7,
+					User_Id  :uni.getStorageSync('userId')
+				},
+				method:'POST',
+				success:function(res){
+					console.log(res)
+					if(res.data == true){
+						 uni.showToast({
+						 	title:'保存成功',
+							icon:'success'
+						 })
+					}
+				}
+			})
+		},
+		//保存录音
+		saveLuyin:function(){
+			var _self = this
+			uni.request({
+				url:_self.$api+'Document/Add_Document',
+				data:{
+					Case_Id:_self.Cause_Id,
+					File_Name:_self.localIdList[0].File_Name,
+					fileName:_self.localIdList[0].fileName,
+					size:_self.localIdList[0].size,
+					Suffix_Name:_self.localIdList[0].Suffix_Name,
+					Customer_contract:7,
+					User_Id  :uni.getStorageSync('userId')
+				},
+					method:'POST',
+				success:function(res){
+					console.log(res)
+					if(res.data == true){
+						 uni.showToast({
+						 	title:'保存成功',
+							icon:'success'
+						 })
+					}
+				}
+			})
+		},
+		//转文字
+		translate:function(){
+				
+		},
 		getInfo(){
 			var _self =  this
 			uni.request({
@@ -452,22 +833,22 @@
 }
 .select1{
 	min-width: 45%;
-	height: 70upx;
+	min-height: 70upx;
 	// border: 1px solid #DDDDDD;
 	display: flex;
 	flex-wrap: nowrap;
-	line-height: 70upx;
+	// line-height: 70upx;
 	text-align: center;
 }
 .select{
 	// width: 200upx; 
-	height: 70upx;
+	min-height: 70upx; 
 	// border: 1px solid #DDDDDD;
 	display: flex;
 	flex: 1;
-	flex-wrap: nowrap;
-	line-height: 70upx;
-	text-align: center;
+	// flex-wrap: nowrap;
+	// line-height: 70upx;
+	// text-align: center;
 //	-webkit-appearance: none;/*兼容苹果手机*/
 }
 .select_lawyer{
@@ -532,6 +913,7 @@
 			.content_middle_view_child_bottom{
 					font-size: 28upx;
 					margin-top: 40upx;	
+					flex-wrap: wrap;
 			}
 			.content_middle_view_child_bottom_info{
 				.pay_title{
@@ -604,7 +986,7 @@
 					height: 200upx;
 				}
 				.info{
-					margin-top: 25upx;
+					// margin-top: 25upx;
 					height: 80upx;
 					.info_p{
 						width: 190upx;
@@ -659,5 +1041,28 @@
 			background: #7E2C2E;
 		}
 	}
-
+.info_p{
+						width: 190upx;
+						font-size:32upx;
+						color: #333333;
+						height: 100%;
+						display: flex;
+						// align-items: center;
+					}
+					.name1{
+						flex: 1;
+						display: flex;
+						min-height: 40px;
+						font-size: 24upx;
+					}
+					.shangchuan_btn{
+						width: 150upx;
+						height: 70upx;
+						color: #ffffff;
+						text-align: center;
+						line-height: 70upx;
+						background: #A92A2E; 
+						font-size: 28upx;
+						font-weight: 500;
+					}
 </style>

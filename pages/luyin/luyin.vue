@@ -21,7 +21,7 @@
 			刚录完的语音
 			{{word}}
 			<div class="list">
-			    <audio ref="player" src="http://lsms.gzbigbang.net/LSMSFolde/aaa.mp3"  controls></audio>
+			    <audio ref="player" src=""  controls></audio>
 			</div>
 			<!-- <br>
 			<br>
@@ -90,6 +90,7 @@ export default {
 		  				_this.error((res) => {
 		  				  alert('出错了：' + res.errMsg)// 这个地方的好处就是wx.config配置错误，会弹出窗口哪里错误，然后根据微信文档查询即可。
 							// _self.configPage()
+							window.location.href = location.href.split('#')[0]
 		  				})
 		  		} 
 		  	})
@@ -235,7 +236,8 @@ export default {
 					}).then((data) => {
 			  alert('上传成功')
               console.log(data)
-              that.$refs.player.src = 'http://lsms.gzbigbang.net/LSMSFolde/aaa.amr'
+			  alert(that.$api+'LSMSFolde'+data[1].data.fileName)
+              that.$refs.player.src = that.$api+'LSMSFolde'+data[1].data.fileName
             }).catch((error) => {
               console.log(error)
             })

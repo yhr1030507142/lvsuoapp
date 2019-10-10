@@ -4,7 +4,7 @@
 			<ul class="ul">
 				<li class="li" @tap="goLiyi()">利益检索</li>
 				<li class="li" @tap="goTongji()">统计</li>
-				<li class="li" @tap="luyin()">录音</li> 
+				<!-- <li class="li" @tap="luyin()">录音</li> -->
 				<li class="li" @tap="tuichu()">退出</li>
 				
 			</ul>
@@ -98,6 +98,7 @@
 							  uni.removeStorageSync('Rule_Id')
 							  uni.removeStorageSync('Expiration_Date') 
 							  uni.removeStorageSync('Username')
+							  uni.removeStorageSync('isAndroid')
 							  uni.navigateTo({
 							  	url: '../login/login',
 							  });
@@ -109,7 +110,8 @@
 							   uni.removeStorageSync('Rule_Id')
 							   uni.removeStorageSync('Expiration_Date') 
 							   uni.removeStorageSync('Username')
-							    uni.navigateTo({
+							   uni.removeStorageSync('isAndroid')
+							   uni.navigateTo({
 							   	url: '../login/login',
 							   });
 						}

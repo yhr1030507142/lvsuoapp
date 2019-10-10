@@ -1,146 +1,140 @@
 <template>
 	<view class="add">
-		
 
-	<view class="content">
-      
 
-	 <view class="content_middle flex col m-100">
-			<view class="content_middle_view">
-				<view class="content_middle_view_child flex col">
-					
+		<view class="content">
+
+
+			<view class="content_middle flex col m-100">
+				<view class="content_middle_view">
+					<view class="content_middle_view_child flex col">
+
 						<view class="content_middle_view_child_header flex row">
-								<text class="state">客户基本信息</text>
+							<text class="state">客户基本信息</text>
 						</view>
 						<view class="content_middle_view_child_bottom flex row">
-							
-						<select class="select" @change="changeCustomer()" v-model="customValue">
-							<option value="" disabled selected hidden>请选择客户类型</option>
-							<option :value="v.Id" v-for="(v,i) in customTypeArr" :key="i">{{v.Value}}</option>
-						</select>
-							
-						 <select class="select"  v-model="isValue">
-							 <option value="" disabled selected hidden>是否常年客户</option>
-							<option  :value="v.Id" v-for="(v,i) in isValueArr" :key="i">{{v.Value}}</option>
-						</select>
-							
-							 <select class="select" v-show="customValue!=3&&customValue!=14" v-model="suoshuValue">
-								 <option value="" disabled selected hidden>请选择所属行业</option>
-								 <option  :value="v1.Id" v-for="(v1,i1) in suoshuhangyeArr" :key="i1">{{v1.Value}}</option>
+
+							<select class="select" @change="changeCustomer()" v-model="customValue">
+								<option value="" disabled selected hidden>请选择客户类型</option>
+								<option :value="v.Id" v-for="(v,i) in customTypeArr" :key="i">{{v.Value}}</option>
+							</select>
+
+							<select class="select" v-model="isValue">
+								<option value="" disabled selected hidden>是否常年客户</option>
+								<option :value="v.Id" v-for="(v,i) in isValueArr" :key="i">{{v.Value}}</option>
+							</select>
+
+							<select class="select" v-show="customValue!=3&&customValue!=14" v-model="suoshuValue">
+								<option value="" disabled selected hidden>请选择所属行业</option>
+								<option :value="v1.Id" v-for="(v1,i1) in suoshuhangyeArr" :key="i1">{{v1.Value}}</option>
 							</select>
 						</view>
-						
+
 						<view class="content_middle_view_child_bottom_info flex col">
 							<div class="info flex row">
-									<p class="info_p">客户名称</p>
-									<input type="text" v-model="search">
+								<p class="info_p">客户名称</p>
+								<input type="text" v-model="search">
 							</div>
-								<div class="info flex row" v-show="customValue==3 || customValue==14">
-										<p class="info_p">证件</p>
-										<input type="text" v-model="cardNo">
-								</div>
-									<div class="info flex row" v-show="customValue!=3&&customValue!=14">
-										<p class="info_p">纳税人编号</p>
-										<input type="text" v-model="cardNo">
-								</div>
-								<div class="info flex row" v-show="customValue!=3&&customValue!=14">
-										<p class="info_p">职务</p>
-										<input type="text" v-model="zhiwu">
-								</div>
-								
-								<div class="info flex row">
-										<p class="info_p">省市</p>
-										<input type="text" v-model="province" @tap="toggleTab()">
-										<w-picker mode="region" 
-										step="1" 
-										:defaultVal="defaultVal" 
-										:current="true" 
-										@confirm="onConfirm" 
-										ref="picker" 
-										themeColor="#f00" 
-										></w-picker>
-								</div>
+							<div class="info flex row" v-show="customValue==3 || customValue==14">
+								<p class="info_p">证件</p>
+								<input type="text" v-model="cardNo">
+							</div>
+							<div class="info flex row" v-show="customValue!=3&&customValue!=14">
+								<p class="info_p">纳税人编号</p>
+								<input type="text" v-model="cardNo">
+							</div>
+							<div class="info flex row" v-show="customValue!=3&&customValue!=14">
+								<p class="info_p">职务</p>
+								<input type="text" v-model="zhiwu">
+							</div>
+
 							<div class="info flex row">
-									<p class="info_p">地址</p>
-									<input type="text" v-model="address">
+								<p class="info_p">省市</p>
+								<input type="text" v-model="province" @tap="toggleTab()">
+								<w-picker mode="region" step="1" :defaultVal="defaultVal" :current="true" @confirm="onConfirm" ref="picker"
+								 themeColor="#f00"></w-picker>
 							</div>
-								
-								<div class="info flex row">
-										<p class="info_p">电话</p>
-										<input type="text" v-model="tel">
-								</div>
-						</view>	
-							
+							<div class="info flex row">
+								<p class="info_p">地址</p>
+								<input type="text" v-model="address">
+							</div>
+
+							<div class="info flex row">
+								<p class="info_p">电话</p>
+								<input type="text" v-model="tel">
+							</div>
+						</view>
+
+					</view>
 				</view>
 			</view>
-	  </view>
-	  
-	   
-	 	<view class="content_middle_view">
-	 				<view class="content_middle_view_child flex col">
-	 					
-	 						<view class="content_middle_view_child_header flex row">
-	 								<text class="state">案件基本信息</text>
-	 						</view>
-	 						<view class="content_middle_view_child_bottom flex row row_between">
-	 							 <select class="select" @change="changeOneMenu(value)" v-model="value" >
-	 								<option value="" disabled selected hidden>一级案件类型</option>
-	 							    <option :value="v.Id" v-for="(v,i) in arr" :key="i">{{v.Category_Name}}</option>
-	 							</select>
-	 							
-	 							 <select class="select" @change="changeTwoMenu(value1)" v-model="value1">
-	 							<option value="" disabled selected hidden>二级案件类型</option>
-	 							    <option :value="v.Id" v-for="(v,i) in arr1" :key="i">{{v.Value}}</option>
-	 							</select>
-	 							
-	 							 <select class="select" v-model="caseWhy" @change="changeCaseReson(caseWhy)">
-	 								<option value="" disabled selected hidden>一级案由类型</option>
-	 								<option :value="v.Id" v-for="(v,i) in CaseResonArr" :key="i">{{v.Category_Name}}</option>
-	 							 </select>
-								  <select class="select" v-model="caseWhy1">
-								 	<option value="" disabled selected hidden>二级案由类型</option>
-								 	 <option :value="v.Id" v-for="(v,i) in CaseResonArr1" :key="i">{{v.Value}}</option>
-								 </select>
-	 						</view>
-	 						
-	 						<view class="content_middle_view_child_bottom_info flex col">
-	 								<div class="info flex row">
-	 										<p class="info_p">案件名称</p>
-	 										<input type="text" v-model="caseName">
-	 								</div>
-	 								
-	 								<div class="info flex row">
-	 										<p class="info_p">标的额</p>
-	 										<input type="text" v-model="biaodie">
-	 								</div>
-	 								
-	 								<div class="info flex row">
-	 										<p class="info_p">受理机关</p>
-	 										<input type="text" v-model="compony">
-	 								</div>
-									
-									<div class="info flex row">
-											<p class="info_p">对方当事人</p>
-											<input type="text" v-model="oppositeParty">
-									</div>
-									
-	 						</view>	
-	 							
-	 				</view>
-	 			</view>
-							<!--  -->
-					 	<view class="content_middle_view">
-							<view class="content_middle_view_child flex col">
-								
-									<view class="content_middle_view_child_header flex row">
-											<text class="state">案情简介</text>
-									</view>
-									
-									
-									<view class="content_middle_view_child_bottom_info flex col">
-											<!-- <rich-text :nodes=""></rich-text> -->
-											<textarea value="" placeholder="" v-model="textarea" class="textarea"/>
-									</view>	
+
+
+			<view class="content_middle_view">
+				<view class="content_middle_view_child flex col">
+
+					<view class="content_middle_view_child_header flex row">
+						<text class="state">案件基本信息</text>
+					</view>
+					<view class="content_middle_view_child_bottom flex row row_between">
+						<select class="select" @change="changeOneMenu(value)" v-model="value">
+							<option value="" disabled selected hidden>一级案件类型</option>
+							<option :value="v.Id" v-for="(v,i) in arr" :key="i">{{v.Category_Name}}</option>
+						</select>
+
+						<select class="select" @change="changeTwoMenu(value1)" v-model="value1">
+							<option value="" disabled selected hidden>二级案件类型</option>
+							<option :value="v.Id" v-for="(v,i) in arr1" :key="i">{{v.Value}}</option>
+						</select>
+
+						<select class="select" v-model="caseWhy" @change="changeCaseReson(caseWhy)">
+							<option value="" disabled selected hidden>一级案由类型</option>
+							<option :value="v.Id" v-for="(v,i) in CaseResonArr" :key="i">{{v.Category_Name}}</option>
+						</select>
+						<select class="select" v-model="caseWhy1">
+							<option value="" disabled selected hidden>二级案由类型</option>
+							<option :value="v.Id" v-for="(v,i) in CaseResonArr1" :key="i">{{v.Value}}</option>
+						</select>
+					</view>
+
+					<view class="content_middle_view_child_bottom_info flex col">
+						<div class="info flex row">
+							<p class="info_p">案件名称</p>
+							<input type="text" v-model="caseName">
+						</div>
+
+						<div class="info flex row">
+							<p class="info_p">标的额</p>
+							<input type="text" v-model="biaodie">
+						</div>
+
+						<div class="info flex row">
+							<p class="info_p">受理机关</p>
+							<input type="text" v-model="compony">
+						</div>
+
+						<div class="info flex row">
+							<p class="info_p">对方当事人</p>
+							<input type="text" v-model="oppositeParty">
+						</div>
+
+					</view>
+
+				</view>
+			</view>
+			<!--  -->
+			<view class="content_middle_view">
+				<view class="content_middle_view_child flex col">
+
+					<view class="content_middle_view_child_header flex row">
+						<text class="state">案情简介</text>
+					</view>
+
+
+					<view class="content_middle_view_child_bottom_info flex col">
+						<!-- <rich-text :nodes=""></rich-text> -->
+						<textarea value="" placeholder="" v-model="textarea" class="textarea" />
+						</view>	
 										
 							</view>
 						</view>
@@ -389,48 +383,8 @@
 		</view>
 	</view>
 	<!--  -->
-<!--  -->
-<view class="content_middle_view">
-		<view class="content_middle_view_child flex col" style="padding-bottom: 0;">
-			
-				<view class="content_middle_view_child_header flex row">
-					<view class="shoufeifangshi">
-							<p class="shoufeifangshi_p">上传图片或视频</p>
-					<!-- 	<select name="" id="" class="shoufeifangshi_select" v-model="fileType">
-							<option :value="v.Id" v-for="(v,i) in fileTypeArr" :key="i">{{v.value}}</option>
-						</select> -->
-						
-					</view>
-					 
-					
-				</view>
-				 <view class="flex row">
-					 <view class="shangchuan_btn"  @click="picUpload()">上传图片</view>
-				 <view class="shangchuan_btn"  @click="picUpload1()" style="margin-left: 20upx;">上传视频</view>
-				 </view>
-				
-		</view>
-	</view>
-<!--  -->
-	<!--  -->
-	<view class="content_middle_view">
-			<view class="content_middle_view_child flex col" style="padding-bottom: 0;">
-				
-					<view class="content_middle_view_child_header flex row">
-						<view class="shoufeifangshi">
-								<p class="shoufeifangshi_p">录音(60s语音)</p>
-						</view>
-						 <view class="shangchuan_btn"  @click="picUpload()">录音</view> 
-					</view>
-					<view>录音时间{{time}}</view>
-					<view>刚录完的语音:{{word}}</view> 
-					
-					<view class="list">
-					    <audio ref="player" src="http://lsms.gzbigbang.net/LSMSFolde/aaa.mp3"  controls></audio>
-					</view>
-			</view>
-		</view>
-	<!--  -->	
+
+	
 	</view>
 	<view class="btn_box flex row row_between">
 	<view class="btn btn1" @tap="look()">预览合同</view>
@@ -438,9 +392,8 @@
 	</view>
 		</view>
 </template>
-
 <script>
-	 import {mapState,mapMutations} from 'vuex';
+import {mapState,mapMutations} from 'vuex';
 import wPicker from "@/components/w-picker/w-picker.vue";
 import wx from 'weixin-js-sdk'
 const _this = wx
@@ -459,6 +412,16 @@ const _this = wx
 				time: 0,
 				timer: null,
 				word:'无',
+				localIdList:[
+					{localId: '',
+					serverId: '',
+					downLoadId: '',
+					Soff: true,
+					time: 0,
+					timer: null,
+					word:'无',
+					src:''}
+				],
 				//
 				value:'',
 				value1:'',
@@ -523,62 +486,27 @@ const _this = wx
 					 	placeholder: '',
 					 	theme: ''
 					 },
+					 up_image:'',
+					 up_video:'',
+					 picImage:'',
 					 
 				
 			}
 		}, 
 		onLoad() {
 			var _self =this
-				_self.configPage()
 				_self.getCustomList()
 				_self.getSuoshuhangye()
 				_self.getOneMenu()
-				_self.getXialaList()
-				
+				_self.getXialaList()	
 		},
 		onShow(){
 	
 		},
 		methods: {
-					configPage(){
-					  var _self = this
-					  alert(location.href)
-					  console.log(location.href.split('#')[0])
-					  var data = {url:location.href.split('#')[0],AppId:'wxc9722e78824af65f',AppSecret:'2521b18d19e16fc99408992572338251'}
-					  console.log(data) 
-					  uni.request({
-					  		url:_self.$api+"Wechar/Sound",
-					  		data:data,
-					  		success:function(res){
-					  		console.log(res)
-					  		 _this.config({
-					  		  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-					  		  appId: 'wxc9722e78824af65f', // 必填，公众号的唯一标识
-					  		  timestamp:res.data.timestamp, // 必填，生成签名的时间戳
-					  		  nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
-					  		  signature:res.data.signature, // 必填，签名
-					  		  jsApiList: ['startRecord','stopRecord', 'playVoice', 'pauseVoice','translateVoice', 'stopVoice', 'uploadVoice', 'downloadVoice'] ,// 必填，需要使用的JS接口列表
-					  		  // 接口 开始录音接口 停止录音接口 播放语音接口 暂停播放接口 停止播放接口 上传语音接口 下载语音接口 识别音频并返回识别结果接口
-					  		}) 
-					  		// config信息验证后才执行 
-					  _this.ready(() => { 
-					  		// 		wx.checkJsApi({
-					  		//     jsApiList: ['startRecord','stopRecord', 'playVoice', 'pauseVoice','translateVoice', 'stopVoice', 'uploadVoice', 'downloadVoice', 'downloadVoice'] ,// 必填，需要使用的JS接口列表
-					  		//     success: function(res) {
-					  		// 
-					  		//     }
-					  		// });
-					  				})
-					  				// 微信sdk错误返回问题
-					  				_this.error((res) => {
-					  				  alert('出错了：' + res.errMsg)// 这个地方的好处就是wx.config配置错误，会弹出窗口哪里错误，然后根据微信文档查询即可。
-					  				
-					  				})
-					  		}
-					  	})
-			},
-			 addAll(){
-           this.checkData()
+			
+			addAll:function(){
+			this.checkData()
             if(this.checkData() == false){
                 return false
             }
@@ -613,7 +541,7 @@ const _this = wx
               'compony':this.compony,
               'oppositePart':this.oppositeParty,
               'caseWhy':this.caseWhy1,
-                    //服务内容
+               //服务内容
               'Service_Content':this.Service_Content,
                //标的额
                 'Target':this.biaodie,
@@ -739,8 +667,8 @@ const _this = wx
 					        title:'添加成功',
 					 		duration:2000
 					  });
-					  uni.navigateTo({
-					  	url:'../pages/index/index'
+					  uni.switchTab({
+					  	url:'../index/index'
 					  })
 					   return false
 					 }else{        
@@ -1259,28 +1187,7 @@ uni.showToast({
 			this.nameJob.push(1)
             this.nameJobArr.push({nameJobName:'',nameJobJob:'',nameJobRate:'',visible:false,nameJobName1:'',Id:''})  
 		},
-		picUpload(){
-			var _self = this
-			uni.chooseImage({
-			success: function (chooseImageRes) {
-				console.log(chooseImageRes)
-				const tempFilePaths = chooseImageRes.tempFilePaths;
-				console.log(tempFilePaths)
-				uni.uploadFile({
-					url: _self.$api+'Base/uploadRawFile', //仅为示例，非真实的接口地址
-					filePath: tempFilePaths[0],
-					name: 'file',
-					formData: {
-						'user': 'test'
-					},
-					success: function (uploadFileRes) {
-						console.log(uploadFileRes)
-						console.log(uploadFileRes.data); 
-					}
-				})
-				}
-				})
-		},
+		
 		//预览合同
 		look(){
 			 // this.checkData()

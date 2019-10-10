@@ -14,11 +14,11 @@
 		 <select class="select" @change="changeTwoMenu(value1)" v-model="value1">
 			<option value="" disabled selected hidden>选择二级类型</option>
 			<option :value="0">全部</option>
-		    <option :value="v.Id" v-for="(v,i) in arr1" :key="i">{{v.Value}}</option>
+		    <option :value="v.Id" v-for="(v,i) in arr1" :key="i">{{v.Value}}</option> 
 		</select>
 		
 		<select class="select" @change="changeStatus(value2)" v-model="value2">
-			<option value="" disabled selected hidden>选择案件状态</option>
+			<option value="" disabled selected hidden>选择案件状态</option> 
 		    <option :value="v.value" v-for="(v,i) in options" :key="i">{{v.label}}</option>
 		</select>
 		
@@ -80,69 +80,129 @@
 			 _self.getMineList() 
 		},
 		onLoad:function(){
-			   
-				// uni.request({
-				// url:_self.$api+"Login/Sel_Login_Status",
-				// data:{sessionId:uni.getStorageSync('sessionId'),User_Id:uni.getStorageSync('userId')},
-				// success:function(res){
-				// 	console.log(res)
-				// 	 if(res.data == 1){ 
-				// 			uni.showToast({
-				// 			    title:'账号异地登陆 强制退出',
-				// 			     duration:2000,
-				// 				 success:function(){
-				// 					 uni.removeStorageSync('userId')
-				// 					 uni.removeStorageSync('sessionId')
-				// 					 uni.removeStorageSync('Rule_Id')
-				// 					 uni.removeStorageSync('Expiration_Date') 
-				// 					 uni.removeStorageSync('Username')
-				// 					 uni.navigateTo({
-				// 					 	url: '../login/login',
-				// 					 });
-				// 					       return false
-				// 				 }
-				// 			});			
-				// 	  }
-				// 	   if(res.data == 3){
-				// 		   	uni.showToast({
-				// 		       title:'登录已过期',
-				// 		        duration:2000,
-				// 				success:function(){
-				// 					uni.removeStorageSync('userId')
-				// 					uni.removeStorageSync('sessionId')
-				// 					uni.removeStorageSync('Rule_Id')
-				// 					uni.removeStorageSync('Expiration_Date') 
-				// 					uni.removeStorageSync('Username')
-				// 					uni.navigateTo({
-				// 						url: '../login/login',
-				// 					});
-				// 					      return false
-				// 				}
-				// 		   });
-				// 		}else{
-				// 			
-				// 			uni.getSystemInfo({
-				// 			        success: (res)=> {
-				// 			            this.windowHeight = res.windowHeight;
-				// 			        }
-				// 			    });    
-				// 			    uni.onWindowResize((res) => {
-				// 			        if(res.size.windowHeight < this.windowHeight){
-				// 			            this.tabbar = false
-				// 			        }else{
-				// 			            this.tabbar = true
-				// 			        }
-				// 			    })
-				// 		}
-				// 	}
-				// })       
+			// var _self = this
+			// 	uni.request({
+			// 	url:_self.$api+"Login/Sel_Login_Status",
+			// 	data:{sessionId:uni.getStorageSync('sessionId'),User_Id:uni.getStorageSync('userId')},
+			// 	success:function(res){
+			// 		console.log(res)
+			// 		 if(res.data == 1){ 
+			// 				uni.showToast({
+			// 				    title:'账号异地登陆 强制退出',
+			// 				     duration:2000,
+			// 					 success:function(){
+			// 						 uni.removeStorageSync('userId')
+			// 						 uni.removeStorageSync('sessionId')
+			// 						 uni.removeStorageSync('Rule_Id')
+			// 						 uni.removeStorageSync('Expiration_Date') 
+			// 						 uni.removeStorageSync('Username')
+			// 						 uni.navigateTo({
+			// 						 	url: '../login/login',
+			// 						 });
+			// 						       return false
+			// 					 }
+			// 				});			
+			// 		  }
+			// 		   if(res.data == 3){
+			// 			   	uni.showToast({
+			// 			       title:'登录已过期',
+			// 			        duration:2000,
+			// 					success:function(){
+			// 						uni.removeStorageSync('userId')
+			// 						uni.removeStorageSync('sessionId')
+			// 						uni.removeStorageSync('Rule_Id')
+			// 						uni.removeStorageSync('Expiration_Date') 
+			// 						uni.removeStorageSync('Username')
+			// 						uni.navigateTo({
+			// 							url: '../login/login',
+			// 						});
+			// 						      return false
+			// 					}
+			// 			   });
+			// 			}else{
+			// 					uni.getSystemInfo({
+			// 				        success: (res)=> {
+			// 				            this.windowHeight = res.windowHeight;
+			// 				        }
+			// 				    });    
+			// 				    uni.onWindowResize((res) => {
+			// 				        if(res.size.windowHeight < this.windowHeight){
+			// 				            this.tabbar = false
+			// 				        }else{
+			// 				            this.tabbar = true
+			// 				        }
+			// 				    })
+			// 			}
+			// 		}
+			// 	})       
 		},
-		onShow(){
+		onShow:function(){
+			//alert('show')
 			var _self = this
-			_self.getOneMenu()
-			_self.getMineList()
-		
 			
+				uni.request({
+				url:_self.$api+"Login/Sel_Login_Status",
+				data:{sessionId:uni.getStorageSync('sessionId'),User_Id:uni.getStorageSync('userId')},
+				success:function(res){
+					console.log(res)
+					 if(res.data == 1){ 
+							uni.showToast({
+							    title:'账号异地登陆 强制退出',
+							     duration:2000,
+								 success:function(){
+									 uni.removeStorageSync('userId')
+									 uni.removeStorageSync('sessionId')
+									 uni.removeStorageSync('Rule_Id')
+									 uni.removeStorageSync('Expiration_Date') 
+									 uni.removeStorageSync('Username')
+									 uni.navigateTo({
+									 	url: '../login/login',
+									 });
+									       return false
+								 }
+							});			
+					  }
+					   if(res.data == 3){
+						   	uni.showToast({
+						       title:'登录已过期',
+						        duration:2000,
+								success:function(){
+									uni.removeStorageSync('userId')
+									uni.removeStorageSync('sessionId')
+									uni.removeStorageSync('Rule_Id')
+									uni.removeStorageSync('Expiration_Date') 
+									uni.removeStorageSync('Username')
+									uni.navigateTo({
+										url: '../login/login',
+									});
+									      return false
+								}
+						   });
+						}else{
+							var u = navigator.userAgent
+							var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1
+							if (isAndroid) {
+							  uni.setStorageSync('isAndroid',1)
+							} else {
+							   uni.setStorageSync('isAndroid',2)		
+							}
+							_self.getOneMenu()
+							_self.getMineList()
+								uni.getSystemInfo({
+							        success: (res)=> {
+							            this.windowHeight = res.windowHeight;
+							        }
+							    });    
+							    uni.onWindowResize((res) => {
+							        if(res.size.windowHeight < this.windowHeight){
+							            this.tabbar = false
+							        }else{
+							            this.tabbar = true
+							        }
+							    })
+						}
+					}
+				})       
 		},
 		 components: {//2注册组件
 						uniLoadMore
