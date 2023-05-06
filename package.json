@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "echarts": "^4.2.1",
+    "echarts": "^5.4.2",
     "js-md5": "^0.7.3",
     "recorder-js": "^1.0.7",
     "recorderx": "^2.0.2"
